@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#57105C</color>
+    <color name="colorPrimaryDark">#611367</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="color_hint">#915396</color>
+    <color name="color_light_input_bg">#F2F2F2</color>
+    <color name="color_player_tint">#FCD6FF</color>
+    <color name="color_player_progress_tint">#EF5764</color>
+    <color name="color_devider_border">#A63EAD</color>
+    <color name="color_darker_button">#38083C</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

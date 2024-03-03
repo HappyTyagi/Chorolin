@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DownloadActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:text="Edit"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="#fff"
+                android:background="@android:color/transparent">
+
+            </TextView>
+
+
+            <ImageButton
+                android:id="@+id/delete_all_songs"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_gravity="end"
+                android:src="@mipmap/delete"
+                android:background="@android:color/transparent"/>
+            <ImageButton
+                android:id="@+id/change_pitch"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_gravity="end"
+                android:src="@mipmap/settings"
+                android:background="@android:color/transparent"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:background="@mipmap/bg"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/purchasedmusicsongs_txtVoiceType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="ALTO"
+        android:textColor="@android:color/white"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:background="@color/colorPrimary"/>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_above="@+id/purchasedmusicsongs_layoutPlayer"
+        android:layout_below="@+id/purchasedmusicsongs_txtVoiceType"
+        android:id="@+id/downloaded_song_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <RelativeLayout
+        android:id="@+id/purchasedmusicsongs_layoutPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_player"/>
+
+    </RelativeLayout>
+</RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

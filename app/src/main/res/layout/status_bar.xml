@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/color_player_tint">
+
+    <ImageView
+        android:id="@+id/status_bar_album_art"
+        android:layout_width="@dimen/status_bar_album_art"
+        android:layout_height="@dimen/status_bar_album_art"
+        android:gravity="center"
+        android:scaleType="centerInside"
+        android:src="@mipmap/app_icon"/>
+
+    <ImageView
+        android:id="@+id/status_bar_icon"
+        android:layout_width="@dimen/status_bar_album_art"
+        android:layout_height="@dimen/status_bar_album_art"
+        android:background="@color/colorPrimary"
+        android:scaleType="center"
+        android:src="@mipmap/sing_icn"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/status_bar_button_info_container_padding_left" >
+
+
+        <TextView
+            android:id="@+id/status_bar_track_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/status_bar_prev"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/cd_play"
+        android:scaleType="centerInside"
+        android:src="@mipmap/previous_song"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/status_bar_play"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/cd_play"
+        android:scaleType="centerInside"
+        android:src="@mipmap/player"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/status_bar_next"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/cd_next"
+        android:scaleType="centerInside"
+        android:src="@mipmap/next_song"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/status_bar_collapse"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center_vertical"
+        android:src="@mipmap/cross"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>

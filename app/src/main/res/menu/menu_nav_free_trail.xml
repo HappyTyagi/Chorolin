@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_join"
+            android:title="@string/nav_join"
+            android:icon="@mipmap/join"/>
+
+        <item
+            android:id="@+id/action_about_us"
+            android:title="@string/nav_about_us"
+            android:icon="@mipmap/about_us"/>
+
+        <item
+            android:id="@+id/action_faq"
+            android:title="FAQ"
+            android:icon="@mipmap/faq"/>
+
+
+        <item
+            android:id="@+id/action_contact_us"
+            android:title="@string/nav_contact_us"
+            android:icon="@mipmap/contact_us"/>
+
+        <item
+            android:id="@+id/action_terms_and_conditions"
+            android:title="@string/nav_terms_and_conditions"
+            android:icon="@mipmap/terms"/>
+
+        <item
+            android:id="@+id/action_privacy_policy"
+            android:title="@string/privacy_policy"
+            android:icon="@mipmap/privacy_policy"/>
+
+
+        <item
+            android:id="@+id/visit_web"
+            android:title="@string/visit_web"
+            android:icon="@mipmap/web"/>
+    </group>
+
+</menu>

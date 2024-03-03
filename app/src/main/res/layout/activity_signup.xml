@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.choraline.SignupActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <Button
+                android:id="@+id/signup_btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:textAllCaps="true"
+                android:text="@string/text_submit"
+                android:textColor="@android:color/white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/tootlbar_imgbtnShare"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:padding="10dp"
+                android:src="@mipmap/share"
+                android:background="@android:color/transparent"
+                android:visibility="gone"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@mipmap/bg"
+        android:visibility="visible">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="@dimen/margin_left_or_right"
+                android:layout_marginRight="@dimen/margin_left_or_right"
+                android:layout_marginStart="@dimen/margin_left_or_right"
+                android:layout_marginEnd="@dimen/margin_left_or_right">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/signup_edtFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_first_name"
+                        android:inputType="text"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/rounded_input_layout_dark_border"
+                        android:gravity="center_vertical"
+                        android:hint="@string/text_signup_last_name"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimary"
+                        android:textColorHint="@color/color_hint"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="15dp"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_email"
+                        android:inputType="textWebEmailAddress"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtConfirmEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="15dp"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_confirm_email"
+                        android:inputType="textWebEmailAddress"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="15dp"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_password"
+                        android:inputType="textWebPassword"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="15dp"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_confirm_password"
+                        android:inputType="textWebPassword"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                    <EditText
+                        android:id="@+id/signup_edtNameOfYourChoir"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="15dp"
+                        android:maxLines="1"
+                        android:padding="15dp"
+                        android:hint="@string/text_signup_name_of_your_choir"
+                        android:inputType="text"
+                        android:textColorHint="@color/color_hint"
+                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/rounded_input_layout_dark_border"/>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

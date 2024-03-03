@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/rounded_choral_works_item"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+       >
+
+        <TextView
+            android:id="@+id/row_basketitem_txtSongName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6.3"
+            android:text="Bach Chrismatch orientario (bach Magnificent"
+            android:textStyle="normal"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        <TextView
+            android:id="@+id/row_basketitem_txtPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:gravity="right"
+            android:text=""
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+        <LinearLayout
+            android:layout_weight="1.2"
+            android:layout_width="0dp"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/row_basketitem_imgbtnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+
+            android:src="@mipmap/cross_btn"
+            android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/with_singer"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textStyle="normal"
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+</LinearLayout>
