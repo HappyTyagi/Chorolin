@@ -2,6 +2,7 @@ package com.choraline.network
 
 import com.choraline.models.*
 import com.choraline.utils.Constants
+import com.example.example.ForceUpdateResponse
 import retrofit2.Call
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -77,6 +78,10 @@ interface APIInterface {
     @Streaming
     @GET
     fun downloadSong(@Url fileUrl: String): Call<ResponseBody>
+
+
+    @GET
+    fun appVersion(@Url fileUrl: String): Call<ForceUpdateResponse>
 
     @FormUrlEncoded
     @POST(Constants.COMPOSER_LIST_URL)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.choraline">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -211,15 +212,16 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".PrivacyPlicyActivity"
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".PrivacyPlicyActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/privacy_policy"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            ></activity>
+            android:windowSoftInputMode="adjustPan" />
 
 
 <!--        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"-->

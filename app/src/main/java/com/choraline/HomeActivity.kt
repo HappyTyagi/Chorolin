@@ -14,12 +14,15 @@ import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.choraline.adapters.ComposersListAdapter
 import com.choraline.models.*
+import com.choraline.network.APIClient
+import com.choraline.network.APIInterface
 import com.choraline.network.APIListener
 import com.choraline.network.Webservices
 import com.choraline.utils.*
@@ -31,6 +34,7 @@ import com.saadahmedsoft.popupdialog.listener.OnDialogButtonClickListener
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
 import java.io.File
+import java.io.IOException
 
 
 class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
@@ -55,6 +59,8 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
         setContentView(R.layout.activity_home)
         context = this@HomeActivity
 
+        checkForUpdate()
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -73,27 +79,26 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
         initUI()
 
 
-
 //        if (Utility.getPopUp(this).equals("1")) {
 //        } else {
 
-            PopupDialog.getInstance(this)
-                .setStyle(Styles.ALERT)
-                .setHeading("Information!")
-                .setDismissButtonText("OK")
-                .setDismissButtonTextColor(R.color.white)
-                .setDismissButtonTextColor(R.color.white)
-                .setDismissButtonBackground(R.color.colorPrimary)
-                .setDescription(
-                    "Any music in the Downloads section will have to be moved across again from the Purchased section. \n" +
-                            "      Thank You"
-                )
-                .setCancelable(false)
-                .showDialog(object : OnDialogButtonClickListener() {
-                    override fun onDismissClicked(dialog: Dialog?) {
-                        super.onDismissClicked(dialog)
-                    }
-                })
+        PopupDialog.getInstance(this)
+            .setStyle(Styles.ALERT)
+            .setHeading("Information!")
+            .setDismissButtonText("OK")
+            .setDismissButtonTextColor(R.color.white)
+            .setDismissButtonTextColor(R.color.white)
+            .setDismissButtonBackground(R.color.colorPrimary)
+            .setDescription(
+                "Any music in the Downloads section will have to be moved across again from the Purchased section. \n" +
+                        "      Thank You"
+            )
+            .setCancelable(false)
+            .showDialog(object : OnDialogButtonClickListener() {
+                override fun onDismissClicked(dialog: Dialog?) {
+                    super.onDismissClicked(dialog)
+                }
+            })
 
 
 //            Utility.setPopup(this, "1")
@@ -147,18 +152,22 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
             R.id.action_choraline_shops -> {
 
             }
+
             R.id.action_purchased_music -> {
                 intents = Intent(context, PurchasedMusicActivity::class.java)
                 startActivity(intents)
             }
+
             R.id.action_order_history -> {
                 intents = Intent(context, OrderHistoryActivity::class.java)
                 startActivity(intents)
             }
+
             R.id.action_profile -> {
                 intents = Intent(context, ProfileActivity::class.java)
                 startActivity(intents)
             }
+
             R.id.action_about_us -> {
                 intents = Intent(context, AboutUsActivity::class.java)
                 startActivity(intents)
@@ -174,6 +183,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
                 intents!!.putExtra(Constants.AppConstants.PATH, filedir)
                 startActivity(intents)
             }
+
             R.id.action_faq -> {
 
                 intents = Intent(context, FAQActivity::class.java)
@@ -181,15 +191,18 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
                 // Utility.openBrowawer(this,Constants.FAQ_URL)
             }
+
             R.id.action_contact_us -> {
                 intents = Intent(context, ContactUsActivity::class.java)
                 startActivity(intents)
             }
+
             R.id.action_terms_and_conditions -> {
                 intents = Intent(context, TermsAndConditionsActivity::class.java)
                 startActivity(intents)
                 // Utility.openBrowawer(this,Constants.TERMS_AND_CONDITIONS_URL)
             }
+
             R.id.action_privacy_policy -> {
 
 
@@ -200,6 +213,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
                 // Utility.openBrowawer(this,Constants.PRIVACY_POLICY_URL)
 
             }
+
             R.id.action_logout -> {
                 AppController.dbInstance.clearPurchaseTable()
                 AppController.appPref.isLogin = false
@@ -507,6 +521,36 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
         AppLog.debugD(TAG, "home onDestroy")
         super.onDestroy()
 
+    }
+
+
+    private fun checkForUpdate() {
+
+        var retrofit = APIClient.getClient()
+        var retrofitInterface = retrofit!!.create(APIInterface::class.java)
+        val request =
+            retrofitInterface.appVersion("https://app.choraline.com/api/api.php?action=appVersion")
+        try {
+
+
+            checkForUpdateView()
+        } catch (e: IOException) {
+
+            e.printStackTrace()
+            Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
+
+        }
+    }
+
+
+    private fun checkForUpdateView() {
+        // Replace this with actual logic to check for updates
+        val isUpdateAvailable = true // Assume update is available
+
+        if (isUpdateAvailable) {
+            val updateBottomSheet = UpdateBottomSheet()
+            updateBottomSheet.show(supportFragmentManager, "UpdateBottomSheet")
+        }
     }
 
 }
