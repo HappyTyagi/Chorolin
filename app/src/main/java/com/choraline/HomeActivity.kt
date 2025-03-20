@@ -9,7 +9,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import com.google.android.material.navigation.NavigationView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
@@ -26,6 +25,7 @@ import com.choraline.network.APIInterface
 import com.choraline.network.APIListener
 import com.choraline.network.Webservices
 import com.choraline.utils.*
+import com.example.example.ForceUpdateResponse
 import com.google.gson.Gson
 import com.saadahmedsoft.popupdialog.PopupDialog
 import com.saadahmedsoft.popupdialog.Styles
@@ -33,8 +33,9 @@ import com.saadahmedsoft.popupdialog.listener.OnDialogButtonClickListener
 
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
-import java.io.File
-import java.io.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
@@ -523,31 +524,35 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
     }
 
-
     private fun checkForUpdate() {
+        val retrofit = APIClient.getClient()
+        val retrofitInterface = retrofit!!.create(APIInterface::class.java)
 
-        var retrofit = APIClient.getClient()
-        var retrofitInterface = retrofit!!.create(APIInterface::class.java)
-        val request =
-            retrofitInterface.appVersion("https://app.choraline.com/api/api.php?action=appVersion")
-        try {
+        retrofitInterface.appVersion("https://app.choraline.com/api/api.php?action=appVersion")
+            .enqueue(object : Callback<ForceUpdateResponse> {
+                override fun onResponse(
+                    call: Call<ForceUpdateResponse>,
+                    response: Response<ForceUpdateResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val versionData = response.body()!!.response!!.androidMobileVersion
+                        checkForUpdateView(versionData!!.toInt())
+                    } else {
+                        Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
+                    }
 
+                }
 
-            checkForUpdateView()
-        } catch (e: IOException) {
-
-            e.printStackTrace()
-            Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
-
-        }
+                override fun onFailure(call: Call<ForceUpdateResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
 
-    private fun checkForUpdateView() {
-        // Replace this with actual logic to check for updates
-        val isUpdateAvailable = true // Assume update is available
-
-        if (isUpdateAvailable) {
+    private fun checkForUpdateView(versionData: Int?) {
+        if (versionData!! < 48) {
             val updateBottomSheet = UpdateBottomSheet()
             updateBottomSheet.show(supportFragmentManager, "UpdateBottomSheet")
         }
