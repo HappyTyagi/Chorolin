@@ -1,6 +1,5 @@
 package com.choraline
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -10,39 +9,37 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatSeekBar
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.adapters.PurchasedSongsListAdapter
 import com.choraline.services.DownloadService
 import com.choraline.services.MusicPlayerService
 import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.layout_player.*
-import kotlinx.android.synthetic.main.activity_purchased_music_song_list.*
 import com.choraline.models.SongsData
 import com.choraline.utils.AppController
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
-
-import kotlinx.android.synthetic.main.pitch_dialogue.view.*
-
 import java.io.File
 
 
-class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
+open class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
     MusicPlayerService.updatePrepared {
     var isLeftSelected = false
     var isRightSelected = false
@@ -52,10 +49,10 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
     }
 
     override fun updatePrep() {
-        Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, true)
+        Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, true)
         player_progressLoading!!.visibility = View.GONE
         updateProgressBar()
-        player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+        player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
 
     }
 
@@ -64,11 +61,11 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         if (musicPlayerService!!.mState!!.toString()
                 .equals(MusicPlayerService.State.Playing.toString())
         ) {
-            player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+            player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
         } else if (musicPlayerService!!.mState!!.toString()
                 .equals(MusicPlayerService.State.Paused.toString())
         ) {
-            player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+            player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
         }
     }
 
@@ -87,7 +84,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         if (mHandler != null)
             mHandler.removeCallbacks(updateTimeTask)
         selectedPosition = pos
-        player_progressLoading.visibility = View.VISIBLE
+        player_progressLoading!!.visibility = View.VISIBLE
         if (!musicPlayerService!!.albumId.equals("") and musicPlayerService!!.albumId.equals(
                 selectedAlbumId
             )
@@ -100,7 +97,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         if (mHandler != null)
             mHandler.removeCallbacks(updateTimeTask)
         selectedPosition = pos
-        player_progressLoading.visibility = View.VISIBLE
+        player_progressLoading!!.visibility = View.VISIBLE
         if (!musicPlayerService!!.albumId.equals("") and musicPlayerService!!.albumId.equals(
                 selectedAlbumId
             )
@@ -112,7 +109,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         mHandler.removeCallbacks(updateTimeTask)
         adapter.refreshList(-1)
         if (!isHide) {
-            purchasedmusicsongs_layoutPlayer.setVisibility(View.GONE)
+            purchasedmusicsongs_layoutPlayer!!.setVisibility(View.GONE)
             musicPlayerService = null
         }
         isHide = false
@@ -144,11 +141,52 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         val TAG = "PurchasedMusicSongList"
     }
 
+    var purchasedmusicsongs_layoutPlayer : View? = null
+    var purchasedmusicsongs_txtVoiceType : TextView? = null
+    var purchasedmusicsongs_recyclerSongs : RecyclerView? = null
+    var loop_image_view : ImageView? = null
+    var player_imgbtnPlayStop : ImageButton? = null
+    var player_imgbtnPrevious : ImageButton? = null
+    var player_imgbtnNext : ImageButton? = null
+    var change_pitch : ImageButton? = null
+    var player_progressLoading : ProgressBar? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var text_left : TextView? = null
+    var text_right : TextView? = null
+    var txt_start_time : TextView? = null
+    var txt_end_time : TextView? = null
+    var player_seekbar : AppCompatSeekBar? = null
+    var layoutParent : RelativeLayout? = null
+    var player_imgbtnClose : ImageButton? = null
+    var toolbar : Toolbar? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchased_music_song_list)
 
         context = this@PurchasedMusicSongListActivity
+
+
+
+        player_imgbtnClose = findViewById(R.id.player_imgbtnClose)
+        layoutParent = findViewById(R.id.layoutParent)
+        player_progressLoading = findViewById(R.id.player_progressLoading)
+        txt_start_time = findViewById(R.id.txt_start_time)
+        txt_end_time = findViewById(R.id.txt_end_time)
+        player_imgbtnNext = findViewById(R.id.player_imgbtnNext)
+        player_imgbtnPrevious = findViewById(R.id.player_imgbtnPrevious)
+        player_imgbtnPlayStop = findViewById(R.id.player_imgbtnPlayStop)
+        loop_image_view = findViewById(R.id.loop_image_view)
+        change_pitch = findViewById(R.id.change_pitch)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        purchasedmusicsongs_recyclerSongs = findViewById(R.id.purchasedmusicsongs_recyclerSongs)
+        purchasedmusicsongs_layoutPlayer = findViewById(R.id.purchasedmusicsongs_layoutPlayer)
+        purchasedmusicsongs_txtVoiceType = findViewById(R.id.purchasedmusicsongs_txtVoiceType)
+        text_left = findViewById(R.id.text_left)
+        text_right = findViewById(R.id.text_right)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        player_seekbar = findViewById(R.id.player_seekbar)
 
         //player.initUI()
         if (intent != null) {
@@ -170,14 +208,17 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
                     intent!!.getStringExtra(Constants.AppConstants.SUBTITLE)!!.replace("/", " ")
                         .replace("*", "")
             }
+
+
+
             if (AppController.mAppController!!.getLooping()) {
-                loop_image_view.setBackgroundResource(R.mipmap.loop_active)
+                loop_image_view!!.setBackgroundResource(R.mipmap.loop_active)
 
             } else {
-                loop_image_view.setBackgroundResource(R.mipmap.loop_inactive)
+                loop_image_view!!.setBackgroundResource(R.mipmap.loop_inactive)
             }
 
-            loop_image_view.setOnClickListener {
+            loop_image_view!!.setOnClickListener {
                 AppController.mAppController!!.setLooping()
                 if (musicPlayerService != null) {
                     musicPlayerService!!.setLooping()
@@ -185,40 +226,24 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
 
 
                 if (AppController.mAppController!!.getLooping()) {
-                    loop_image_view.setBackgroundResource(R.mipmap.loop_active)
+                    loop_image_view!!.setBackgroundResource(R.mipmap.loop_active)
 
                 } else {
-                    loop_image_view.setBackgroundResource(R.mipmap.loop_inactive)
+                    loop_image_view!!.setBackgroundResource(R.mipmap.loop_inactive)
                 }
             }
 
-            change_pitch.setOnClickListener {
+            change_pitch!!.setOnClickListener {
                 pitchDialogue()
             }
 
         }
 
         AppController!!.setupInteface(this)
-//        val filedir = File(
-//            Environment.getExternalStorageDirectory(),
-//            "/ChoraLine/" + singerNmae + "-" + subTitle + "-" + (selectedVoiceType.replace("/", " ")
-//                .replace("*", ""))
-//        )
-//        val files = filedir.listFiles()
-
-
 
         var appSpecificInternalStorageDirectory = context.getDir("Choralin", Context.MODE_PRIVATE)
         var file1111 = File(appSpecificInternalStorageDirectory, subTitle);
-
-
-//        var files: Array<File>? = null;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         var  files = File(file1111, "").listFiles()
-
-
-
-
 
         if (files != null) {
             for (i in 0 until files.size) {
@@ -247,9 +272,9 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         }
         player = MediaPlayer()
 
-        purchasedmusicsongs_txtVoiceType.setText(selectedTitle.toUpperCase() + "\n" + selectedVoiceType)
+        purchasedmusicsongs_txtVoiceType!!.setText(selectedTitle.toUpperCase() + "\n" + selectedVoiceType)
         adapter = PurchasedSongsListAdapter(context, this@PurchasedMusicSongListActivity, songList)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         // player_seekbar.setPadding(0,0,0,0)
@@ -262,18 +287,28 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         val builder = AlertDialog.Builder(this)
 
         var view = LayoutInflater.from(this).inflate(R.layout.pitch_dialogue, null)
+        var point_five_pitch_radio: RadioButton = view.findViewById(R.id.point_five_pitch_radio)
+        var point_seven_five_pitch: RadioButton = view.findViewById(R.id.point_seven_five_pitch)
+        var one_pitch_radio: RadioButton = view.findViewById(R.id.one_pitch_radio)
+        var seekbar_adjust_volume: SeekBar = view.findViewById(R.id.seekbar_adjust_volume)
+        var switch_default: TextView = view.findViewById(R.id.switch_default)
+        var apply_tv: TextView = view.findViewById(R.id.apply_tv)
+        var cancel_tv: TextView = view.findViewById(R.id.cancel_tv)
+
+
+
         builder.setView(view)
 
         when {
-            AppController.mAppController!!.getPitch() == .9f -> view.point_five_pitch_radio.isChecked =
+            AppController.mAppController!!.getPitch() == .9f -> point_five_pitch_radio.isChecked =
                 true
-            AppController.mAppController!!.getPitch() == 0.75f -> view.point_seven_five_pitch.isChecked =
+            AppController.mAppController!!.getPitch() == 0.75f -> point_seven_five_pitch.isChecked =
                 true
-            else -> view.one_pitch_radio.isChecked = true
+            else -> one_pitch_radio.isChecked = true
         }
 
 
-        view.seekbar_adjust_volume.progress = AppController.mAppController!!.getVolumeProgress()
+        seekbar_adjust_volume.progress = AppController.mAppController!!.getVolumeProgress()
 
         var progressChangedValue = 0
         var leftVolume = 0f
@@ -281,7 +316,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         var isAdjustVolumeClicked: Boolean = false
 
 
-        view.seekbar_adjust_volume.setOnSeekBarChangeListener(object :
+        seekbar_adjust_volume.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -314,42 +349,19 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
             }
         })
 
-        /* when{
-             AppController.mAppController?.getLeftVolume() == 1 ->
-         }*/
-
-
-        /*    builder.setPositiveButton("Apply", DialogInterface.OnClickListener { dialog, id ->
-            if (view.point_five_pitch_radio.isChecked)
-                AppController!!.mAppController!!.setPich(0.5f)
-            else if (view.point_seven_five_pitch.isChecked)
-                AppController!!.mAppController!!.setPich(0.75f)
-            else  AppController!!.mAppController!!.setPich(1.0f)
-
-            if (musicPlayerService!=null)
-            {
-                musicPlayerService!!.setPich()
-            }
-        })
-
-        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
-          dialog.dismiss()
-        })
-        builder.show()*/
-
         val dialog = builder.show()
 
         dialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        view.seekbar_adjust_volume.progress = 50
-        view.switch_default.setOnClickListener {
+        seekbar_adjust_volume.progress = 50
+        switch_default.setOnClickListener {
             musicPlayerService?.setVolume(1.0f, 1.0f)
-            view.seekbar_adjust_volume.progress = 50
+            seekbar_adjust_volume.progress = 50
         }
 
-        view.apply_tv.setOnClickListener {
-            if (view.point_five_pitch_radio.isChecked)
+        apply_tv.setOnClickListener {
+            if (point_five_pitch_radio.isChecked)
                 AppController.mAppController!!.setPich(0.9f)
-            else if (view.point_seven_five_pitch.isChecked)
+            else if (point_seven_five_pitch.isChecked)
                 AppController.mAppController!!.setPich(0.75f)
             else AppController.mAppController!!.setPich(1.0f)
 
@@ -363,23 +375,25 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         }
 
 
-        view.cancel_tv.setOnClickListener { dialog.dismiss() }
+        cancel_tv.setOnClickListener { dialog.dismiss() }
 
     }
 
     fun initUI() {
         val mLayoutManager = LinearLayoutManager(context)
-        purchasedmusicsongs_recyclerSongs.setLayoutManager(mLayoutManager)
-        purchasedmusicsongs_recyclerSongs.setItemAnimator(DefaultItemAnimator())
-        purchasedmusicsongs_recyclerSongs.setAdapter(adapter)
+        purchasedmusicsongs_recyclerSongs!!.setLayoutManager(mLayoutManager)
+        purchasedmusicsongs_recyclerSongs!!.setItemAnimator(DefaultItemAnimator())
+        purchasedmusicsongs_recyclerSongs!!.setAdapter(adapter)
 
-        tootlbar_imgbtnShare.setOnClickListener(this)
 
-        text_left.setOnClickListener {
+
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
+
+        text_left!!.setOnClickListener {
             leftSelected(isRightSelected)
         }
 
-        text_right.setOnClickListener {
+        text_right!!.setOnClickListener {
             rightSelected(isLeftSelected)
         }
 
@@ -388,16 +402,16 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
     private fun rightSelected(isSelected: Boolean) {
         if (isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_left.isSelected = false
+            text_left!!.isSelected = false
         }
 
-        if (text_right.isSelected) {
+        if (text_right!!.isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_right.isSelected = false
+            text_right!!.isSelected = false
             isRightSelected = false
         } else {
             musicPlayerService?.setVolume(0f, 1f)
-            text_right.isSelected = true
+            text_right!!.isSelected = true
             isRightSelected = true
         }
     }
@@ -406,17 +420,17 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
 
         if (isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_right.isSelected = false
+            text_right!!.isSelected = false
         }
 
 
-        if (text_left.isSelected) {
+        if (text_left!!.isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_left.isSelected = false
+            text_left!!.isSelected = false
             isLeftSelected = false
         } else {
             musicPlayerService?.setVolume(1f, 0f)
-            text_left.isSelected = true
+            text_left!!.isSelected = true
             isLeftSelected = true
         }
     }
@@ -472,26 +486,26 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
     fun initPlayer() {
 
 
-        player_imgbtnPlayStop.setOnClickListener {
+        player_imgbtnPlayStop!!.setOnClickListener {
 
             if (musicPlayerService != null && musicPlayerService!!.mState.toString()
                     .equals(MusicPlayerService.State.Playing.toString())
             ) {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
                 val i = Intent(context, MusicPlayerService::class.java)
                 i!!.action = Constants.ACTION.PLAY_ACTION
                 startService(i)
             } else {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
                 val i = Intent(context, MusicPlayerService::class.java)
                 i!!.action = Constants.ACTION.PLAY_ACTION
                 startService(i)
             }
         }
 
-        player_imgbtnPrevious.setOnClickListener {
+        player_imgbtnPrevious!!.setOnClickListener {
             if (selectedPosition - 1 >= 0) {
-                Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+                Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
                 selectedPosition--
                 player_seekbar!!.progress = 0
                 player_seekbar!!.max = 100
@@ -503,8 +517,8 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
 
         }
 
-        player_imgbtnNext.setOnClickListener {
-            Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+        player_imgbtnNext!!.setOnClickListener {
+            Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
             player_seekbar!!.progress = 0
             player_seekbar!!.max = 100
             val i = Intent(context, MusicPlayerService::class.java)
@@ -512,7 +526,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
             startService(i)
         }
 
-        player_imgbtnClose.setOnClickListener {
+        player_imgbtnClose!!.setOnClickListener {
             stopServices()
         }
 
@@ -521,7 +535,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
 
 
 
-        player_seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        player_seekbar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
             }
@@ -545,7 +559,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         try {
             mHandler.removeCallbacks(updateTimeTask)
             adapter.refreshList(-1)
-            purchasedmusicsongs_layoutPlayer.setVisibility(View.GONE)
+            purchasedmusicsongs_layoutPlayer!!.setVisibility(View.GONE)
             val i = Intent(context, MusicPlayerService::class.java)
             i!!.action = Constants.ACTION.STOPFOREGROUND_ACTION
             startService(i)
@@ -591,22 +605,22 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
         }
         songList.get(pos).isPlaying = true
 
-        purchasedmusicsongs_layoutPlayer.setVisibility(View.VISIBLE)
-        player_progressLoading.visibility = View.VISIBLE
+        purchasedmusicsongs_layoutPlayer!!.setVisibility(View.VISIBLE)
+        player_progressLoading!!.visibility = View.VISIBLE
 
 
         //on complete
-        player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+        player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
         songList.get(selectedPosition).isPlaying = false;
         adapter.refreshList(-1);
 
         //player.start()
         adapter.refreshList(pos)
-        player_seekbar.progress = 0
-        player_seekbar.max = 100
+        player_seekbar!!.progress = 0
+        player_seekbar!!.max = 100
         //updateProgressBar();
-        purchasedmusicsongs_layoutPlayer.visibility = View.VISIBLE
-        player_progressLoading.visibility = View.VISIBLE
+        purchasedmusicsongs_layoutPlayer!!.visibility = View.VISIBLE
+        player_progressLoading!!.visibility = View.VISIBLE
         val i = Intent(this, MusicPlayerService::class.java)
         i.action = Constants.ACTION.STARTFOREGROUND_ACTION
         val b: Bundle = Bundle();
@@ -645,14 +659,14 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
 
             val progress =
                 Utility.getProgressPercentage(currentDuration.toLong(), totalDuration.toLong())
-            player_seekbar.progress = progress
+            player_seekbar!!.progress = progress
 
 
             Utility.showTime(
                 currentDuration,
-                txt_start_time,
+                txt_start_time!!,
                 totalDuration,
-                txt_end_time
+                txt_end_time!!
             )// show time
 
             // Running this thread after 100 milliseconds
@@ -661,7 +675,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
     }
 
     fun resetTextProgress() {
-        Utility.showTime(0, txt_start_time, 0, txt_end_time)// show time
+        Utility.showTime(0, txt_start_time!!, 0, txt_end_time!!)// show time
     }
 
 
@@ -676,7 +690,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
             return
         }
         if (checkPermission()) {
-            Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+            Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
             Utility.displayToast(context, "Your download has been started in the notification bar.")
             val intent = Intent(this, DownloadService::class.java)
             urllist.add(songList.get(pos).songUrl)
@@ -730,7 +744,7 @@ class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
             } else {
 
                 Snackbar.make(
-                    layoutParent,
+                    layoutParent!!,
                     "Permission Denied, Please allow to proceed !",
                     Snackbar.LENGTH_LONG
                 ).show()

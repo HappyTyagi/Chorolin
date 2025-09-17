@@ -6,18 +6,32 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import com.choraline.utils.AppController
 import com.choraline.utils.Utility
-import kotlinx.android.synthetic.main.activity_thank_you.*
 
 class ThankYouActivity : BaseActivity(), View.OnClickListener {
+
+
+    var toolbar : Toolbar? = null
+
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var thankyou_btnGoToPurchase : Button? = null
+    var thankyou_btnContinueShopping : Button? = null
+    var thankyou_btnLogout : Button? = null
+
 
     private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_thank_you)
         context=this@ThankYouActivity
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+        toolbar = findViewById(R.id.toolbar)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        thankyou_btnGoToPurchase = findViewById(R.id.thankyou_btnGoToPurchase)
+        thankyou_btnContinueShopping = findViewById(R.id.thankyou_btnContinueShopping)
+        thankyou_btnLogout = findViewById(R.id.thankyou_btnLogout)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         initUI()

@@ -1,7 +1,5 @@
 package com.choraline
 
-//import com.braintreepayments.api.dropin.DropInRequest
-//import com.braintreepayments.api.dropin.DropInResult
 
 import android.app.Activity
 import android.content.Context
@@ -19,10 +17,16 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.braintreepayments.api.*
 import com.braintreepayments.cardform.view.CardForm
 import com.choraline.adapters.BasketListAdapter
@@ -38,7 +42,8 @@ import com.choraline.utils.AppLog
 import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_basket.*
+
+//import kotlinx.android.synthetic.main.activity_basket.*
 
 
 class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropInListener {
@@ -47,6 +52,17 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
     val TAG: String = BasketActivity::class.simpleName!!.toString()
     private lateinit var context: Context
     var toolbar: Toolbar? = null
+
+    var basket_recyclerBasket: RecyclerView? = null
+    var basket_txtContinueShopping: TextView? = null
+    var basket_btnPurchase: Button? = null
+    var tootlbar_imgbtnShare: ImageButton? = null
+    var basket_btnEnter: Button? = null
+    var basket_txtTotalPrice: TextView? = null
+    var basket_layoutDiscout: LinearLayout? = null
+    var basket_edtDiscountCode: EditText? = null
+    var layoutParent: RelativeLayout? = null
+
     lateinit var basketModel: BasketModel
     lateinit var adapter: BasketListAdapter
     lateinit var purchaseData: PurchaseData
@@ -58,7 +74,21 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
         context = this@BasketActivity
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+         toolbar = findViewById(R.id.toolbar)
+
+
+
+        basket_recyclerBasket = findViewById(R.id.basket_recyclerBasket)
+        basket_txtContinueShopping = findViewById(R.id.basket_txtContinueShopping)
+        basket_btnPurchase = findViewById(R.id.basket_btnPurchase)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        basket_btnEnter = findViewById(R.id.basket_btnEnter)
+        basket_txtTotalPrice = findViewById(R.id.basket_txtTotalPrice)
+        basket_layoutDiscout = findViewById(R.id.basket_layoutDiscout)
+        basket_edtDiscountCode = findViewById(R.id.basket_edtDiscountCode)
+        layoutParent = findViewById(R.id.layoutParent)
+
+
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         if (intent != null) {
@@ -108,11 +138,10 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                 basketModel!!.response!!.list,
                 basketModel!!.response!!.currency_symbol
             )
-            val mLayoutManager = LinearLayoutManager(context)
-            mLayoutManager!!.orientation = LinearLayout.VERTICAL
-            basket_recyclerBasket!!.layoutManager = mLayoutManager
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            basket_recyclerBasket!!.layoutManager = layoutManager
             basket_recyclerBasket!!.itemAnimator = DefaultItemAnimator()
-            basket_recyclerBasket.setAdapter(adapter)
+            basket_recyclerBasket!!.setAdapter(adapter)
 
             val loginString = SpannableString(getString(R.string.text_continue_shopping))
             loginString.setSpan(
@@ -143,14 +172,14 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                 loginString.length,
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE
             )
-            basket_txtContinueShopping.setText(loginString)
-            basket_txtContinueShopping.setMovementMethod(LinkMovementMethod.getInstance())
+            basket_txtContinueShopping!!.setText(loginString)
+            basket_txtContinueShopping!!.setMovementMethod(LinkMovementMethod.getInstance())
 
             setValues()
 
-            tootlbar_imgbtnShare.setOnClickListener(this)
-            basket_btnEnter.setOnClickListener(this)
-            basket_btnPurchase.setOnClickListener(this)
+            tootlbar_imgbtnShare!!.setOnClickListener(this)
+            basket_btnEnter!!.setOnClickListener(this)
+            basket_btnPurchase!!.setOnClickListener(this)
         }
     }
 
@@ -166,12 +195,12 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
         }
 
         if (Build.VERSION.SDK_INT >= 24) {
-            basket_txtTotalPrice.text = Html.fromHtml(
+            basket_txtTotalPrice!!.text = Html.fromHtml(
                 basketModel!!.response!!.currency_symbol + " " + basketModel!!.response!!.subtotal,
                 0
             )
         } else {
-            basket_txtTotalPrice.text =
+            basket_txtTotalPrice!!.text =
                 Html.fromHtml(basketModel!!.response!!.currency_symbol + " " + basketModel!!.response!!.subtotal)
         }
     }
@@ -182,7 +211,7 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
             Utility!!.shareApp(context)
         } else if (v == basket_btnEnter) {
             if (basket_edtDiscountCode!!.text.toString().equals("")) {
-                Utility!!.showSnakeBar(layoutParent, "Please Enter the Discount Code.")
+                Utility!!.showSnakeBar(layoutParent!!, "Please Enter the Discount Code.")
             } else {
                 if (isCouponApply) {
                     removeDiscountCoupon()
@@ -251,19 +280,19 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                     basketModel = result
                     adapter!!.refreshList(basketModel!!.response!!.list)
                     setValues()
-                    discountCode = basket_edtDiscountCode.text.toString()
+                    discountCode = basket_edtDiscountCode!!.text.toString()
                     Utility!!.showMessageDialog(context, result.message)
 
                     isCouponApply = !isCouponApply;
                     if (isCouponApply) {
                         // basket_edtDiscountCode.isFocusable = false
-                        basket_edtDiscountCode.isEnabled = false;
-                        basket_btnEnter.text = "REMOVE"
+                        basket_edtDiscountCode!!.isEnabled = false;
+                        basket_btnEnter!!.text = "REMOVE"
                     } else {
                         // basket_edtDiscountCode.isFocusable = true
-                        basket_edtDiscountCode.isEnabled = true;
-                        basket_btnEnter.text = "ENTER"
-                        basket_edtDiscountCode.setText("")
+                        basket_edtDiscountCode!!.isEnabled = true;
+                        basket_btnEnter!!.text = "ENTER"
+                        basket_edtDiscountCode!!.setText("")
                     }
                 } else {
                     Utility!!.showMessageDialog(context, result!!.message)
@@ -283,7 +312,7 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                         AppController!!.appPref!!.basketData = ""
                     }
                     setValues()
-                    Utility!!.showSnakeBar(layoutParent, result!!.message)
+                    Utility!!.showSnakeBar(layoutParent!!, result!!.message)
                 } else {
                     Utility!!.showMessageDialog(context, result!!.message)
 
@@ -298,7 +327,7 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                     makePayement(result)
                 }
             } else {
-                Utility!!.showSnakeBar(layoutParent, result!!.message)
+                Utility!!.showSnakeBar(layoutParent!!, result!!.message)
             }
         }
         if (api == Constants!!.API_SUBMIT_ORDER) {

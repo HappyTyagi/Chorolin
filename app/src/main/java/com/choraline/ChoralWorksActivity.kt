@@ -11,8 +11,13 @@ import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.choraline.adapters.ChoralWorksListAdapter
@@ -29,13 +34,21 @@ import com.choraline.utils.Utility
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
-import kotlinx.android.synthetic.main.activity_choral_works.*
 
 class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, APIListener{
 
     val TAG : String? = ChoralWorksActivity::class.simpleName
     private lateinit var context : Context
-    //var toolbar: Toolbar? = null
+    var toolbar: Toolbar? = null
+
+    var choralworks_txtWithOutSinger: TextView? = null
+    var tootlbar_imgbtnShare: ImageButton? = null
+    var choralworks_txtWithSinger: TextView? = null
+    var choralworks_imgBanner: ImageView? = null
+    var choralworks_recyclerChoralWorks: RecyclerView? = null
+    var choralworks_layoutTab: LinearLayout? = null
+    var choralworks_swipeRefreshLayout: SwipeRefreshLayout? = null
+
 
     var choralWorksModel = ChoralWorksModel()
     lateinit var adapter: ChoralWorksListAdapter
@@ -48,7 +61,16 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choral_works)
         context=this@ChoralWorksActivity
-      //  toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+        toolbar = findViewById(R.id.toolbar)
+
+
+        choralworks_txtWithOutSinger = findViewById(R.id.choralworks_txtWithOutSinger)
+        choralworks_imgBanner = findViewById(R.id.choralworks_imgBanner)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        choralworks_txtWithSinger = findViewById(R.id.choralworks_txtWithSinger)
+        choralworks_recyclerChoralWorks = findViewById(R.id.choralworks_recyclerChoralWorks)
+        choralworks_layoutTab = findViewById(R.id.choralworks_layoutTab)
+        choralworks_swipeRefreshLayout = findViewById(R.id.choralworks_swipeRefreshLayout)
         setSupportActionBar(toolbar)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -66,16 +88,18 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
     fun initUI()
     {
 
-        choralworks_swipeRefreshLayout.setOnRefreshListener(this)
-        choralworks_txtWithOutSinger.setOnClickListener(this)
-        choralworks_txtWithSinger.setOnClickListener(this)
-        tootlbar_imgbtnShare.setOnClickListener(this)
+
+
+        choralworks_swipeRefreshLayout!!.setOnRefreshListener(this)
+        choralworks_txtWithOutSinger!!.setOnClickListener(this)
+        choralworks_txtWithSinger!!.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
         adapter = ChoralWorksListAdapter(context, this, albumList)
         val mLayoutManager = GridLayoutManager(context, 2)
-        choralworks_recyclerChoralWorks.setLayoutManager(mLayoutManager)
+        choralworks_recyclerChoralWorks!!.setLayoutManager(mLayoutManager)
         val spacingInPixels = 25
-        choralworks_recyclerChoralWorks.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, false, 0))
-        choralworks_recyclerChoralWorks.setAdapter(adapter)
+        choralworks_recyclerChoralWorks!!.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, false, 0))
+        choralworks_recyclerChoralWorks!!.setAdapter(adapter)
         manageTabSelection(1)
         setValues()
     }
@@ -86,12 +110,14 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
             albumList.clear()
             albumList.addAll(choralWorksModel!!.response!!.paidsongList)
 
-            Picasso.with(context).load(choralWorksModel!!.response!!.bannerImage).into(choralworks_imgBanner)
+            Picasso.get()
+                .load(choralWorksModel?.response?.bannerImage)
+                .into(choralworks_imgBanner)
 
             if(choralWorksModel.response!!.paidsongwitsingerList.size>0)
-                choralworks_layoutTab.visibility=View.VISIBLE
+                choralworks_layoutTab!!.visibility=View.VISIBLE
             else
-                choralworks_layoutTab.visibility=View.GONE
+                choralworks_layoutTab!!.visibility=View.GONE
             adapter.notifyDataSetChanged()
         }
     }
@@ -119,7 +145,7 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
     override fun onRefresh() {
-        choralworks_swipeRefreshLayout.isRefreshing=false
+        choralworks_swipeRefreshLayout!!.isRefreshing=false
        // getChoralWorks(selectedComposerTitle)
     }
 
@@ -163,8 +189,8 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
         }
         else if(api == Constants.API_CHORAL_WORKS)
         {
-            if(choralworks_swipeRefreshLayout.isRefreshing)
-                choralworks_swipeRefreshLayout.isRefreshing =false
+            if(choralworks_swipeRefreshLayout!!.isRefreshing)
+                choralworks_swipeRefreshLayout!!.isRefreshing =false
             var result = obj as ChoralWorksModel
             if(result.status)
             {
@@ -200,19 +226,19 @@ class ChoralWorksActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLa
         if(pos==1)
         {
 
-            choralworks_txtWithOutSinger.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-            choralworks_txtWithOutSinger.setBackgroundColor(Color.WHITE)
+            choralworks_txtWithOutSinger!!.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            choralworks_txtWithOutSinger!!.setBackgroundColor(Color.WHITE)
 
-            choralworks_txtWithSinger.setTextColor(Color.WHITE)
-            choralworks_txtWithSinger.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            choralworks_txtWithSinger!!.setTextColor(Color.WHITE)
+            choralworks_txtWithSinger!!.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
         }
         else if(pos==2)
         {
-            choralworks_txtWithSinger.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-            choralworks_txtWithSinger.setBackgroundColor(Color.WHITE)
+            choralworks_txtWithSinger!!.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            choralworks_txtWithSinger!!.setBackgroundColor(Color.WHITE)
 
-            choralworks_txtWithOutSinger.setTextColor(Color.WHITE)
-            choralworks_txtWithOutSinger.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            choralworks_txtWithOutSinger!!.setTextColor(Color.WHITE)
+            choralworks_txtWithOutSinger!!.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
         }
     }
 

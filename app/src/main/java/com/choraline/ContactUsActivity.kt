@@ -1,13 +1,15 @@
 package com.choraline
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.text.InputFilter
-import android.text.Spanned
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.RelativeLayout
 import com.choraline.models.GenericResponseModel
 import com.choraline.models.UserData
 import com.choraline.network.APIListener
@@ -17,16 +19,31 @@ import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import com.google.gson.Gson
 
-import kotlinx.android.synthetic.main.activity_contact_us.*
 
 class ContactUsActivity : BaseActivity(), View.OnClickListener, APIListener{
+
+    var toolbar : Toolbar? = null
+    var contactus_edtEmail : EditText? = null
+    var contactus_edtContactNumber : EditText? = null
+    var contactus_edtName : EditText? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var contactus_btnSubmit : Button? = null
+    var contactus_edtLeaveYourMessage : EditText? = null
+    var layoutParent : RelativeLayout? = null
 
     private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_us)
         context = this
-       // val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+         toolbar = findViewById(R.id.toolbar)
+        contactus_edtLeaveYourMessage = findViewById(R.id.contactus_edtLeaveYourMessage)
+        layoutParent = findViewById(R.id.layoutParent)
+        contactus_edtName = findViewById(R.id.contactus_edtName)
+        contactus_edtEmail = findViewById(R.id.contactus_edtEmail)
+        contactus_btnSubmit = findViewById(R.id.contactus_btnSubmit)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        contactus_edtContactNumber = findViewById(R.id.contactus_edtContactNumber)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         initUI()
@@ -44,8 +61,8 @@ class ContactUsActivity : BaseActivity(), View.OnClickListener, APIListener{
             contactus_edtContactNumber!!.setText(data!!.telephone)
 
         }
-        tootlbar_imgbtnShare.setOnClickListener(this)
-        contactus_btnSubmit.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
+        contactus_btnSubmit!!.setOnClickListener(this)
     }
 
     internal var filter: InputFilter = InputFilter { source, start, end, dest, dstart, dend ->
@@ -77,37 +94,37 @@ class ContactUsActivity : BaseActivity(), View.OnClickListener, APIListener{
 
     fun validate() : Boolean
     {
-        if(contactus_edtName.text.toString().equals(""))
+        if(contactus_edtName!!.text.toString().equals(""))
         {
-            Utility.showSnakeBar(layoutParent, "Enter your Name")
+            Utility.showSnakeBar(layoutParent!!, "Enter your Name")
             return false
         }
-        if(contactus_edtEmail.text.toString().equals(""))
+        if(contactus_edtEmail!!.text.toString().equals(""))
         {
-            Utility.showSnakeBar(layoutParent, "Enter your Email.")
+            Utility.showSnakeBar(layoutParent!!, "Enter your Email.")
             return false
         }
-        if(!Utility.isValidEmail(contactus_edtEmail.text.toString()))
+        if(!Utility.isValidEmail(contactus_edtEmail!!.text.toString()))
         {
-            Utility.showSnakeBar(layoutParent, "Enter the valid Email Id.")
+            Utility.showSnakeBar(layoutParent!!, "Enter the valid Email Id.")
             return false
         }
-        if(!contactus_edtContactNumber.text.toString().equals(""))
+        if(!contactus_edtContactNumber!!.text.toString().equals(""))
         {
-            if(contactus_edtContactNumber.text.toString().length<7)
+            if(contactus_edtContactNumber!!.text.toString().length<7)
             {
-                Utility.showSnakeBar(layoutParent, "Contact Number should have atleast 7 digits.")
+                Utility.showSnakeBar(layoutParent!!, "Contact Number should have atleast 7 digits.")
                 return false
             }
         }
-        if(contactus_edtLeaveYourMessage.text.toString().equals(""))
+        if(contactus_edtLeaveYourMessage!!.text.toString().equals(""))
         {
-            Utility.showSnakeBar(layoutParent, "Enter your Message.")
+            Utility.showSnakeBar(layoutParent!!, "Enter your Message.")
             return false
         }
-        if(contactus_edtLeaveYourMessage.text.toString().length>400)
+        if(contactus_edtLeaveYourMessage!!.text.toString().length>400)
         {
-            Utility.showSnakeBar(layoutParent, "Your message should not be greater than 400 characters.")
+            Utility.showSnakeBar(layoutParent!!, "Your message should not be greater than 400 characters.")
             return false
         }
         return  true
@@ -115,8 +132,8 @@ class ContactUsActivity : BaseActivity(), View.OnClickListener, APIListener{
 
     fun doContactUs()
     {
-        Webservices(context, this, true, "Please wait...").callContactUsAPI(contactus_edtName.text.toString(),
-                contactus_edtEmail.text.toString(), contactus_edtContactNumber.text.toString(), contactus_edtLeaveYourMessage.text.toString(),
+        Webservices(context, this, true, "Please wait...").callContactUsAPI(contactus_edtName!!.text.toString(),
+                contactus_edtEmail!!.text.toString(), contactus_edtContactNumber!!.text.toString(), contactus_edtLeaveYourMessage!!.text.toString(),
                 Constants.API_CONTACT_US)
     }
 
@@ -129,14 +146,14 @@ class ContactUsActivity : BaseActivity(), View.OnClickListener, APIListener{
             {
                 if(AppController!!.appPref!!.isLogin)
                 {
-                    contactus_edtLeaveYourMessage.setText("")
+                    contactus_edtLeaveYourMessage!!.setText("")
 
                 }
                 else {
-                    contactus_edtName.setText("")
-                    contactus_edtEmail.setText("")
-                    contactus_edtContactNumber.setText("")
-                    contactus_edtLeaveYourMessage.setText("")
+                    contactus_edtName!!.setText("")
+                    contactus_edtEmail!!.setText("")
+                    contactus_edtContactNumber!!.setText("")
+                    contactus_edtLeaveYourMessage!!.setText("")
                 }
                 Utility.showMessageDialog(context, result.message);
             }

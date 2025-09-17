@@ -2,24 +2,20 @@ package com.choraline
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.adapters.PurchasedMusicAlbumListAdapter
 import com.choraline.models.PurchasedMusicData
-import com.choraline.models.SongsData
 import com.choraline.utils.Constants
 import com.choraline.utils.GridSpacingItemDecoration
 import com.choraline.utils.Utility
-import kotlinx.android.synthetic.main.activity_download.*
-import kotlinx.android.synthetic.main.activity_downloaded_song_album.*
-
 import java.io.File
-import java.io.FileOutputStream
 
 class DownloadedSongAlbumActivity : BaseActivity() {
 
@@ -30,36 +26,44 @@ class DownloadedSongAlbumActivity : BaseActivity() {
     private lateinit var adapter: PurchasedMusicAlbumListAdapter
     private var toolbarTile =""
     val TAG = "DownloadedSongAlbumA"
-   // private var type = 0;
+    var toolbar : Toolbar? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var recycler_view : RecyclerView? = null
+    var toolbar_title : TextView? = null
+    var no_data : TextView? = null
    lateinit var filedir:File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_downloaded_song_album)
-        var toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+         toolbar = findViewById(R.id.toolbar)
+        no_data = findViewById(R.id.no_data)
+        toolbar_title = findViewById(R.id.toolbar_title)
+        recycler_view = findViewById(R.id.recycler_view)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
         setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener{onBackPressed()}
-        tootlbar_imgbtnShare.setOnClickListener{Utility.shareApp(this)}
+        toolbar!!.setNavigationOnClickListener{onBackPressed()}
+        tootlbar_imgbtnShare!!.setOnClickListener{Utility.shareApp(this)}
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        toolbar.setTitle("ssssss")
+        toolbar!!.setTitle("ssssss")
 
       //   type = intent.getIntExtra(Constants.AppConstants.TYPE,0)
         toolbarTile = intent.getStringExtra(Constants.AppConstants.TOOLBARTILE)!!
         if (toolbarTile.length>0)
         {
-            toolbar_title.text = toolbarTile
+            toolbar_title!!.text = toolbarTile
         }else
         {
-            toolbar_title.text = getString(R.string.download)
+            toolbar_title!!.text = getString(R.string.download)
         }
 
         adapter = PurchasedMusicAlbumListAdapter(this,this,albumList)
         val mLayoutManager = GridLayoutManager(this, 2)
-        recycler_view.setLayoutManager(mLayoutManager)
+        recycler_view!!.setLayoutManager(mLayoutManager)
         val spacingInPixels = 25
-        recycler_view.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true, 0))
-        recycler_view.setAdapter(adapter)
+        recycler_view!!.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true, 0))
+        recycler_view!!.setAdapter(adapter)
 
 
 
@@ -74,11 +78,6 @@ class DownloadedSongAlbumActivity : BaseActivity() {
             val appSpecificInternalStorageDirectory: File = this.getDir("Choralin", Context.MODE_PRIVATE)
              files = File(appSpecificInternalStorageDirectory, "").listFiles()
 
-//        } else {
-//          var  path = intent.getStringExtra(Constants.AppConstants.PATH)!!
-//            filedir = File(path)
-//             files = filedir.listFiles()
-//        }
 
 
 
@@ -96,13 +95,13 @@ class DownloadedSongAlbumActivity : BaseActivity() {
 
         if(albumList.size>0)
         {
-            no_data.visibility = View.GONE
-            recycler_view.visibility = View.VISIBLE
+            no_data!!.visibility = View.GONE
+            recycler_view!!.visibility = View.VISIBLE
 
         }else
         {
-            no_data.visibility = View.VISIBLE
-            recycler_view.visibility = View.GONE
+            no_data!!.visibility = View.VISIBLE
+            recycler_view!!.visibility = View.GONE
         }
 
     }

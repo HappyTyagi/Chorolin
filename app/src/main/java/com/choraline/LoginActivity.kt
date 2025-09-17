@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.choraline.models.LoginModel
 import com.choraline.network.APIInterface
 import com.choraline.network.APIListener
@@ -14,9 +18,7 @@ import com.choraline.utils.AppController
 import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_login.*
 import java.io.File
-import java.security.AccessController.getContext
 
 
 class LoginActivity : BaseActivity(), OnClickListener, APIListener{
@@ -25,9 +27,25 @@ class LoginActivity : BaseActivity(), OnClickListener, APIListener{
     private var intents: Intent? = null
     private var apiInterface: APIInterface? = null
 
+    var login_txtforgotPassword : TextView? = null
+    var login_btnLogin : Button? = null
+    var login_btnJoin : Button? = null
+    var login_edtEmail : EditText? = null
+    var login_edtPassword : EditText? = null
+    var layoutParent : RelativeLayout? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
+        login_txtforgotPassword = findViewById(R.id.login_txtforgotPassword)
+        login_btnLogin = findViewById(R.id.login_btnLogin)
+        login_btnJoin = findViewById(R.id.login_btnLogin)
+        login_edtEmail = findViewById(R.id.login_edtEmail)
+        login_edtPassword = findViewById(R.id.login_edtPassword)
+        layoutParent = findViewById(R.id.layoutParent)
+
         context=this
         initUI()
         deleteAllSong()
@@ -35,9 +53,9 @@ class LoginActivity : BaseActivity(), OnClickListener, APIListener{
 
     fun initUI()
     {
-        login_txtforgotPassword.setOnClickListener(this)
-        login_btnLogin.setOnClickListener(this)
-        login_btnJoin.setOnClickListener(this)
+        login_txtforgotPassword!!.setOnClickListener(this)
+        login_btnLogin!!.setOnClickListener(this)
+        login_btnJoin!!.setOnClickListener(this)
         if (!Utility.isExternalStorageReadingAllowed(this)||!Utility.isExternalStorageWritingAllowed(this))
         {
             Utility.requestReadAndWriteExternalStoragePersmission(this)
@@ -68,14 +86,14 @@ class LoginActivity : BaseActivity(), OnClickListener, APIListener{
 
     fun validate() : Boolean
     {
-        if(login_edtEmail.text.toString().equals(""))
+        if(login_edtEmail!!.text.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter Email Id")
+            Utility!!.showSnakeBar(layoutParent!!, "Enter Email Id")
             return false
         }
-        if(login_edtPassword.text.toString().equals(""))
+        if(login_edtPassword!!.text.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter Your Password")
+            Utility!!.showSnakeBar(layoutParent!!, "Enter Your Password")
             return false
         }
         return true
@@ -84,7 +102,7 @@ class LoginActivity : BaseActivity(), OnClickListener, APIListener{
     fun doLogin()
     {
 
-        Webservices(context, this, true, "Logging In...").callLoginAPI(login_edtEmail.text.toString(), login_edtPassword.text.toString(), "tewqtqtgqrterytewyth", "Android", Constants.API_LOGIN);
+        Webservices(context, this, true, "Logging In...").callLoginAPI(login_edtEmail!!.text.toString(), login_edtPassword!!.text.toString(), "tewqtqtgqrterytewyth", "Android", Constants.API_LOGIN);
     }
 
 

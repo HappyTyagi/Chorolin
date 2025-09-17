@@ -16,8 +16,15 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.adapters.FreeVoiceTypeListAdapter
 import com.choraline.models.FreeTrailData
 import com.choraline.models.SongsModel
@@ -30,27 +37,47 @@ import com.choraline.utils.Utility
 import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 
-import kotlinx.android.synthetic.main.activity_free_trail.*
-import kotlinx.android.synthetic.main.content_free_trail.*
-import kotlinx.android.synthetic.main.row_composers.view.*
+
 
 class FreeTrailActivity : BaseActivity(), View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, APIListener {
 
     val TAG: String? = HomeActivity::class.simpleName
     lateinit var context: Context
     private var intents: Intent? = null
-    var toolbar: Toolbar? = null
     var voiceList = ArrayList<FreeVoiceTypeData>()
     private lateinit var adapter: FreeVoiceTypeListAdapter
     private lateinit var freeTrailModel: FreeTrailData
     private var selectedVoiceType: FreeVoiceTypeData? = null
     var toggle: ActionBarDrawerToggle? = null
+    var toolbar : Toolbar? = null
+    var freetrail_navigationView : NavigationView? = null
+    var freetrail_drawerlayout : DrawerLayout? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var freetrail_txtBack : TextView? = null
+    var freetrail_txtComposerName : TextView? = null
+    var freetrail_imgComposer : ImageView? = null
+    var freetrail_txtCategoryName : TextView? = null
+    var total_voice_type : TextView? = null
+    var layoutParent : RelativeLayout? = null
+    var freetrail_btnProceed : Button? = null
+    var freetrail_recyclerVoiceType : RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_free_trail)
         context = this
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+        toolbar = findViewById(R.id.toolbar)
+        layoutParent = findViewById(R.id.layoutParent)
+        total_voice_type = findViewById(R.id.total_voice_type)
+        freetrail_imgComposer = findViewById(R.id.freetrail_imgComposer)
+        freetrail_txtCategoryName = findViewById(R.id.freetrail_txtCategoryName)
+        freetrail_recyclerVoiceType = findViewById(R.id.freetrail_recyclerVoiceType)
+        freetrail_txtBack = findViewById(R.id.freetrail_txtBack)
+        freetrail_btnProceed = findViewById(R.id.freetrail_btnProceed)
+        freetrail_txtComposerName = findViewById(R.id.freetrail_txtComposerName)
+        freetrail_navigationView = findViewById(R.id.freetrail_navigationView)
+        freetrail_drawerlayout = findViewById(R.id.freetrail_drawerlayout)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupDrawer()
@@ -85,7 +112,7 @@ class FreeTrailActivity : BaseActivity(), View.OnClickListener, NavigationView.O
     }
 
     fun initUI() {
-        tootlbar_imgbtnShare.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
         val loginString = SpannableString(getString(R.string.text_back))
         loginString.setSpan(StyleSpan(Typeface.BOLD), 0, loginString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         val signupClickableSpan = object : ClickableSpan() {
@@ -100,8 +127,8 @@ class FreeTrailActivity : BaseActivity(), View.OnClickListener, NavigationView.O
         }
 
         loginString.setSpan(signupClickableSpan, 0, loginString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        freetrail_txtBack.setText(loginString)
-        freetrail_txtBack.setMovementMethod(LinkMovementMethod.getInstance())
+        freetrail_txtBack!!.setText(loginString)
+        freetrail_txtBack!!.setMovementMethod(LinkMovementMethod.getInstance())
         if (InformationStorage.instance.freeTrailModel != null) {
             freeTrailModel = InformationStorage.instance.freeTrailModel as FreeTrailData
 
@@ -110,39 +137,39 @@ class FreeTrailActivity : BaseActivity(), View.OnClickListener, NavigationView.O
                     .placeholder(R.mipmap.jenkins)
                     .fitCenter()
                     .into(freetrail_imgComposer);*/
-            Picasso.with(context)
-                    .load(freeTrailModel.bannerImage)
-                    .into(freetrail_imgComposer)
+            Picasso.get()
+                .load(freeTrailModel.bannerImage)
+                .into(freetrail_imgComposer)
 
             if (freeTrailModel!!.voicetype!!.size > 0) {
                 for (i in 0..freeTrailModel!!.voicetype!!.size - 1)
                     freeTrailModel!!.voicetype[i].isSelected = false;
             }
 
-            freetrail_txtComposerName.setText(freeTrailModel.composerName)
-            freetrail_txtCategoryName.setText(freeTrailModel.categoryName)
+            freetrail_txtComposerName!!.setText(freeTrailModel.composerName)
+            freetrail_txtCategoryName!!.setText(freeTrailModel.categoryName)
             freeTrailModel.voicetype[0].isSelected = true
             selectedVoiceType = freeTrailModel.voicetype[0]
             adapter = FreeVoiceTypeListAdapter(context, this, freeTrailModel.voicetype)
 
-            val mLayoutManager = LinearLayoutManager(context)
-            mLayoutManager.orientation = LinearLayout.HORIZONTAL
+            val mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            freetrail_recyclerVoiceType!!.layoutManager = mLayoutManager
 
-            freetrail_recyclerVoiceType.setLayoutManager(mLayoutManager)
-            freetrail_recyclerVoiceType.setItemAnimator(DefaultItemAnimator())
-            freetrail_recyclerVoiceType.setAdapter(adapter)
+            freetrail_recyclerVoiceType!!.setLayoutManager(mLayoutManager)
+            freetrail_recyclerVoiceType!!.setItemAnimator(DefaultItemAnimator())
+            freetrail_recyclerVoiceType!!.setAdapter(adapter)
 
             if (freeTrailModel.voicetype.size > 2) {
                 //
-                total_voice_type.text = "(" + freeTrailModel.voicetype.size + " available. Swipe to view)"
+                total_voice_type!!.text = "(" + freeTrailModel.voicetype.size + " available. Swipe to view)"
             } else {
-                total_voice_type.text = "(" + freeTrailModel.voicetype.size + " available)"
+                total_voice_type!!.text = "(" + freeTrailModel.voicetype.size + " available)"
             }
 
 
 
 
-            freetrail_btnProceed.setOnClickListener(this)
+            freetrail_btnProceed!!.setOnClickListener(this)
         }
 
     }
@@ -155,7 +182,7 @@ class FreeTrailActivity : BaseActivity(), View.OnClickListener, NavigationView.O
             if (selectedVoiceType != null && selectedVoiceType!!.attr1 != "") {
                 getSongsList()
             } else {
-                Utility.showSnakeBar(layoutParent, "Select Voice Part.")
+                Utility.showSnakeBar(layoutParent!!, "Select Voice Part.")
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.choraline.services
 
-import android.annotation.TargetApi
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -9,30 +8,19 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
-
-import com.choraline.HomeActivity
 import com.choraline.R
-import com.choraline.utils.AppLog
 import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import java.util.*
 import android.media.AudioManager
-import android.content.ContentUris
 import android.graphics.BitmapFactory
 import com.choraline.models.SongsData
 import com.choraline.utils.AppController
-import kotlinx.android.synthetic.main.layout_player.*
-import android.content.ComponentName
 import android.graphics.Color
-import android.media.AudioAttributes
-import android.media.SoundPool
 import android.os.*
 
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.choraline.BaseActivity
 import com.choraline.SplashActivity
 
 

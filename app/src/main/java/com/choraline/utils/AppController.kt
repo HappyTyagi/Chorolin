@@ -2,16 +2,12 @@ package com.choraline.utils
 
 import android.app.Application
 import android.content.Context
-import android.database.sqlite.SQLiteOpenHelper
-import android.os.Environment
 import android.util.Log
 import androidx.multidex.MultiDex
 import com.choraline.database.DatabaseHandler
-import com.choraline.models.SongsData
 import com.choraline.services.MusicPlayerService
-import java.io.File
-
-
+import android.system.Os
+import android.system.OsConstants
 /**
  * Created by root on 6/3/17.
  */
@@ -37,7 +33,8 @@ class AppController : Application() {
         mAppController = this@AppController
         mPreferenceHelper = PreferenceHelper(mAppController as AppController)
 
-
+        val pageSize = Os.sysconf(OsConstants._SC_PAGESIZE)
+        Log.d("PagePolicy", "System page size = $pageSize bytes")
     }
 
 

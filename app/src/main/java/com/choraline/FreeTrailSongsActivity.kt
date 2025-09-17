@@ -1,25 +1,27 @@
 package com.choraline
 
-import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.widget.Toolbar
-
-import kotlinx.android.synthetic.main.activity_free_trail_songs.*
-import kotlinx.android.synthetic.main.layout_player.*
 import android.os.Handler
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.SeekBar
 import com.choraline.adapters.SongsListAdapter
 import com.choraline.models.SongsData
 import com.choraline.utils.Utility
 import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import android.content.Intent
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatSeekBar
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.services.DownloadService
 import com.choraline.services.MusicPlayerService
 import com.choraline.utils.AppController
@@ -36,19 +38,19 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
         musicPlayerService=MusicPlayerService!!.mInstance
     }
     override fun updatePrep() {
-        Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, true)
+        Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, true)
         player_progressLoading!!.visibility=View.GONE
         updateProgressBar()
-        player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+        player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
     }
 
     override fun updatePlay(flag: Int) {
 
             if(musicPlayerService!!.mState!!.toString().equals(MusicPlayerService.State.Playing.toString())) {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
             }
             else if(musicPlayerService!!.mState!!.toString().equals(MusicPlayerService.State.Paused.toString())) {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
             }
 
     }
@@ -57,7 +59,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
         if(mHandler!=null)
             mHandler.removeCallbacks(updateTimeTask)
         selectedPosition=pos
-        player_progressLoading.visibility=View.VISIBLE
+        player_progressLoading!!.visibility=View.VISIBLE
         //adapter!!.refreshList(selectedPosition)
         if(!musicPlayerService!!.albumId.equals("") and musicPlayerService!!.albumId.equals(selectedVoice))
             adapter!!.refreshList(selectedPosition)
@@ -67,7 +69,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
         if(mHandler!=null)
             mHandler.removeCallbacks(updateTimeTask)
         selectedPosition=pos
-        player_progressLoading.visibility=View.VISIBLE
+        player_progressLoading!!.visibility=View.VISIBLE
         //adapter!!.refreshList(selectedPosition)
         if(!musicPlayerService!!.albumId.equals("") and musicPlayerService!!.albumId.equals(selectedVoice))
             adapter!!.refreshList(selectedPosition)
@@ -76,7 +78,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
     override fun updateStop() {
         mHandler.removeCallbacks(updateTimeTask)
         adapter.refreshList(-1)
-        freetrailsongs_layoutPlayer.setVisibility(View.GONE)
+        freetrailsongs_layoutPlayer!!.setVisibility(View.GONE)
     }
 
     lateinit var context: Context
@@ -90,12 +92,55 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
 
     private var musicPlayerService: MusicPlayerService? = null
 
+
+    var loop_image_view : ImageView? = null
+    var player_imgbtnPlayStop : ImageButton? = null
+    var player_imgbtnPrevious : ImageButton? = null
+    var player_imgbtnNext : ImageButton? = null
+    var player_progressLoading : ProgressBar? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var text_left : TextView? = null
+    var text_right : TextView? = null
+    var txt_start_time : TextView? = null
+    var txt_end_time : TextView? = null
+    var player_seekbar : AppCompatSeekBar? = null
+    var layoutParent : RelativeLayout? = null
+    var player_imgbtnClose : ImageButton? = null
+
+    var freetrailsongs_btnJoin : Button? = null
+    var freetrailsongs_txtVoiceType : TextView? = null
+    var freetrailsongs_recyclerSongs : RecyclerView? = null
+    var freetrailsongs_layoutPlayer : RelativeLayout? = null
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_free_trail_songs)
         context=this@FreeTrailSongsActivity
         AppController!!.setupInteface(this)
         //player.initUI()
+        freetrailsongs_btnJoin = findViewById(R.id.freetrailsongs_btnJoin)
+        freetrailsongs_txtVoiceType = findViewById(R.id.freetrailsongs_txtVoiceType)
+        player_imgbtnClose = findViewById(R.id.player_imgbtnClose)
+        layoutParent = findViewById(R.id.layoutParent)
+        player_progressLoading = findViewById(R.id.player_progressLoading)
+        txt_start_time = findViewById(R.id.txt_start_time)
+        txt_end_time = findViewById(R.id.txt_end_time)
+        player_imgbtnNext = findViewById(R.id.player_imgbtnNext)
+        player_imgbtnPrevious = findViewById(R.id.player_imgbtnPrevious)
+        player_imgbtnPlayStop = findViewById(R.id.player_imgbtnPlayStop)
+        loop_image_view = findViewById(R.id.loop_image_view)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        text_left = findViewById(R.id.text_left)
+        text_right = findViewById(R.id.text_right)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        player_seekbar = findViewById(R.id.player_seekbar)
+        freetrailsongs_layoutPlayer = findViewById(R.id.freetrailsongs_layoutPlayer)
+        freetrailsongs_recyclerSongs = findViewById(R.id.freetrailsongs_recyclerSongs)
+
+
         if(intent!=null)
         {
             if(intent.extras!=null) {
@@ -105,14 +150,14 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
         }
         if (AppController.mAppController!!.getLooping())
         {
-            loop_image_view.setBackgroundResource(R.mipmap.loop_active)
+            loop_image_view!!.setBackgroundResource(R.mipmap.loop_active)
 
         }else
         {
-            loop_image_view.setBackgroundResource(R.mipmap.loop_inactive)
+            loop_image_view!!.setBackgroundResource(R.mipmap.loop_inactive)
         }
 
-        loop_image_view.setOnClickListener{
+        loop_image_view!!.setOnClickListener{
             AppController.mAppController!!.setLooping()
             if (musicPlayerService!=null)
             {
@@ -122,38 +167,38 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
 
             if (AppController.mAppController!!.getLooping())
             {
-                loop_image_view.setBackgroundResource(R.mipmap.loop_active)
+                loop_image_view!!.setBackgroundResource(R.mipmap.loop_active)
 
             }else
             {
-                loop_image_view.setBackgroundResource(R.mipmap.loop_inactive)
+                loop_image_view!!.setBackgroundResource(R.mipmap.loop_inactive)
             }
         }
 
-        freetrailsongs_txtVoiceType.setText(selectedVoice.toUpperCase())
+        freetrailsongs_txtVoiceType!!.setText(selectedVoice.toUpperCase())
         adapter= SongsListAdapter(context, this@FreeTrailSongsActivity, songList,0)
         val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        player_seekbar.setPadding(0,0,0,0)
+        player_seekbar!!.setPadding(0,0,0,0)
         initUI()
         initPlayer()
     }
     fun initUI()
     {
         val mLayoutManager = LinearLayoutManager(context)
-        freetrailsongs_recyclerSongs.setLayoutManager(mLayoutManager)
-        freetrailsongs_recyclerSongs.setItemAnimator(DefaultItemAnimator())
-        freetrailsongs_recyclerSongs.setAdapter(adapter)
+        freetrailsongs_recyclerSongs!!.setLayoutManager(mLayoutManager)
+        freetrailsongs_recyclerSongs!!.setItemAnimator(DefaultItemAnimator())
+        freetrailsongs_recyclerSongs!!.setAdapter(adapter)
 
-        tootlbar_imgbtnShare.setOnClickListener(this)
-        freetrailsongs_btnJoin.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
+        freetrailsongs_btnJoin!!.setOnClickListener(this)
 
-        text_left.setOnClickListener {
+        text_left!!.setOnClickListener {
             leftSelected(isRightSelected)
         }
 
-        text_right.setOnClickListener {
+        text_right!!.setOnClickListener {
             rightSelected(isLeftSelected)
         }
 
@@ -162,16 +207,16 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
     private fun rightSelected(isSelected: Boolean) {
         if (isSelected){
             musicPlayerService?.setVolume(1f, 1f)
-            text_left.isSelected = false
+            text_left!!.isSelected = false
         }
 
-        if (text_right.isSelected) {
+        if (text_right!!.isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_right.isSelected = false
+            text_right!!.isSelected = false
             isRightSelected = false
         } else {
             musicPlayerService?.setVolume(0f, 1f)
-            text_right.isSelected = true
+            text_right!!.isSelected = true
             isRightSelected = true
         }
     }
@@ -180,17 +225,17 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
 
         if (isSelected){
             musicPlayerService?.setVolume(1f, 1f)
-            text_right.isSelected = false
+            text_right!!.isSelected = false
         }
 
 
-        if (text_left.isSelected) {
+        if (text_left!!.isSelected) {
             musicPlayerService?.setVolume(1f, 1f)
-            text_left.isSelected = false
+            text_left!!.isSelected = false
             isLeftSelected = false
         } else {
             musicPlayerService?.setVolume(1f, 0f)
-            text_left.isSelected = true
+            text_left!!.isSelected = true
             isLeftSelected = true
         }
     }
@@ -245,26 +290,26 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
     {
 
 
-        player_imgbtnPlayStop.setOnClickListener{
+        player_imgbtnPlayStop!!.setOnClickListener{
 
             if(musicPlayerService!!.mState.toString().equals(MusicPlayerService.State.Playing.toString())) {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
                 val i=Intent(context, MusicPlayerService::class.java)
                 i!!.action=Constants.ACTION.PLAY_ACTION
                 startService(i)
             }
             else {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
                 val i=Intent(context, MusicPlayerService::class.java)
                 i!!.action=Constants.ACTION.PLAY_ACTION
                 startService(i)
             }
         }
 
-        player_imgbtnPrevious.setOnClickListener {
+        player_imgbtnPrevious!!.setOnClickListener {
             if(selectedPosition-1>=0)
             {
-                Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+                Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
                 selectedPosition--
                 player_seekbar!!.progress=0
                 player_seekbar!!.max=100
@@ -275,8 +320,8 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
 
         }
 
-        player_imgbtnNext.setOnClickListener {
-            Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+        player_imgbtnNext!!.setOnClickListener {
+            Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
             player_seekbar!!.progress=0
             player_seekbar!!.max=100
             val i=Intent(context, MusicPlayerService::class.java)
@@ -284,16 +329,16 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
             startService(i)
         }
 
-        player_imgbtnClose.setOnClickListener {
+        player_imgbtnClose!!.setOnClickListener {
             mHandler.removeCallbacks(updateTimeTask)
             adapter.refreshList(-1)
-            freetrailsongs_layoutPlayer.setVisibility(View.GONE)
+            freetrailsongs_layoutPlayer!!.setVisibility(View.GONE)
             val i=Intent(context, MusicPlayerService::class.java)
             i!!.action=Constants.ACTION.STOPFOREGROUND_ACTION
             startService(i)
         }
 
-        player_seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        player_seekbar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
             }
@@ -329,22 +374,22 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
         }
         songList.get(pos).isPlaying=true
 
-        freetrailsongs_layoutPlayer.setVisibility(View.VISIBLE)
-        player_progressLoading.visibility=View.VISIBLE
+        freetrailsongs_layoutPlayer!!.setVisibility(View.VISIBLE)
+        player_progressLoading!!.visibility=View.VISIBLE
         selectedPosition=pos
 
         //on complete
-        player_imgbtnPlayStop.setImageResource(R.mipmap.pause)
+        player_imgbtnPlayStop!!.setImageResource(R.mipmap.pause)
         songList.get(selectedPosition).isPlaying = false;
         adapter.refreshList(-1);
 
         //player.start()
         adapter.refreshList(pos)
-        player_seekbar.setProgress(0);
-        player_seekbar.setMax(100);
+        player_seekbar!!.setProgress(0);
+        player_seekbar!!.setMax(100);
         //updateProgressBar();
-        freetrailsongs_layoutPlayer.setVisibility(View.VISIBLE)
-        player_progressLoading.visibility=View.VISIBLE
+        freetrailsongs_layoutPlayer!!.setVisibility(View.VISIBLE)
+        player_progressLoading!!.visibility=View.VISIBLE
         val i=Intent(context, MusicPlayerService::class.java)
         i!!.action=Constants.ACTION.STARTFOREGROUND_ACTION
         var b=Bundle();
@@ -368,9 +413,9 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
             val currentDuration = musicPlayerService!!.getPosn()
 
             val progress = Utility.getProgressPercentage(currentDuration.toLong(), totalDuration.toLong())
-            player_seekbar.setProgress(progress)
+            player_seekbar!!.setProgress(progress)
 
-            Utility.showTime(currentDuration, txt_start_time, totalDuration, txt_end_time)// show time
+            Utility.showTime(currentDuration, txt_start_time!!, totalDuration, txt_end_time!!)// show time
 
             // Running this thread after 100 milliseconds
             mHandler.postDelayed(this, 100)
@@ -380,7 +425,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
     open fun startDownload(pos: Int) {
         selectedDownloadPosition=pos
         if(checkPermission()) {
-            Utility.updatePlayerView(txt_start_time, txt_end_time, player_seekbar, false)
+            Utility.updatePlayerView(txt_start_time!!, txt_end_time!!, player_seekbar!!, false)
             Utility.displayToast(context, "Your download has been started in the notification bar.")
             val intent = Intent(this, DownloadService::class.java)
             intent.putExtra("id", "-1")
@@ -419,7 +464,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
                 startDownload(selectedDownloadPosition)
             } else {
 
-                Snackbar.make(layoutParent, "Permission Denied, Please allow to proceed !", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(layoutParent!!, "Permission Denied, Please allow to proceed !", Snackbar.LENGTH_LONG).show()
 
             }
         }
@@ -456,7 +501,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
     override fun onBackPressed() {
         if(musicPlayerService!=null) {
             if (musicPlayerService!!.mState!!.toString().equals(MusicPlayerService.State.Playing.toString())) {
-                player_imgbtnPlayStop.setImageResource(R.mipmap.player)
+                player_imgbtnPlayStop!!.setImageResource(R.mipmap.player)
                 musicPlayerService!!.pausePlayer()
             }
         }

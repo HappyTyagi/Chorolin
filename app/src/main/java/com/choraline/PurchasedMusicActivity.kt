@@ -9,7 +9,10 @@ import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.choraline.adapters.PurchasedMusicAlbumListAdapter
 import com.choraline.models.PurchasedMusicData
@@ -22,14 +25,17 @@ import com.choraline.utils.Constants
 import com.choraline.utils.GridSpacingItemDecoration
 import com.choraline.utils.Utility
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_purchased_music.*
 import java.io.File
 
 class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, APIListener {
 
     private lateinit var context: Context
     private var albumList=ArrayList<PurchasedMusicData>()
-
+    var toolbar : Toolbar? = null
+    var no_data : TextView? = null
+    var purchasedmusic_swipeRefreshLayout : SwipeRefreshLayout? = null
+    var purchasedmusic_recycler : RecyclerView? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
     private lateinit var adapter: PurchasedMusicAlbumListAdapter
     private lateinit var dialog: ProgressDialog
 
@@ -44,7 +50,11 @@ class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefres
         dialog = ProgressDialog(this)
         dialog.setMessage("Please wait...")
         dialog.setCancelable(false)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+        toolbar = findViewById(R.id.toolbar)
+        no_data = findViewById(R.id.no_data)
+        purchasedmusic_swipeRefreshLayout = findViewById(R.id.purchasedmusic_swipeRefreshLayout)
+        purchasedmusic_recycler = findViewById(R.id.purchasedmusic_recycler)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         adapter= PurchasedMusicAlbumListAdapter(context, this, albumList)
@@ -59,12 +69,12 @@ class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefres
     fun initUI()
     {
         val mLayoutManager = GridLayoutManager(context, 2)
-        purchasedmusic_recycler.setLayoutManager(mLayoutManager)
+        purchasedmusic_recycler!!.setLayoutManager(mLayoutManager)
         val spacingInPixels = 25
-        purchasedmusic_recycler.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true, 0))
-        purchasedmusic_recycler.setAdapter(adapter)
+        purchasedmusic_recycler!!.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true, 0))
+        purchasedmusic_recycler!!.setAdapter(adapter)
         purchasedmusic_swipeRefreshLayout!!.setOnRefreshListener(this)
-        tootlbar_imgbtnShare.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
         //Utility!!.showSnakeBar(layoutParent, "Under Development")
         getPurchasedMusic()
     }
@@ -204,13 +214,13 @@ class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefres
 
             if(albumList.size==0)
             {
-                no_data.visibility = View.VISIBLE
-                purchasedmusic_recycler.visibility=View.GONE
+                no_data!!.visibility = View.VISIBLE
+                purchasedmusic_recycler!!.visibility=View.GONE
 
             }else
             {
-                no_data.visibility = View.GONE
-                purchasedmusic_recycler.visibility=View.VISIBLE
+                no_data!!.visibility = View.GONE
+                purchasedmusic_recycler!!.visibility=View.VISIBLE
             }
              dialog.dismiss()
             adapter.notifyDataSetChanged()

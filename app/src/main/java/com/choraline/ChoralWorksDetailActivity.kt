@@ -11,9 +11,15 @@ import androidx.appcompat.widget.Toolbar
 import android.text.Html
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.adapters.VoiceTypeListAdapter
 import com.choraline.models.BaseModel
 import com.choraline.models.BasketModel
@@ -28,17 +34,11 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
 
-
-import kotlinx.android.synthetic.main.activity_choral_works_detail.*
-import retrofit2.http.Field
-
-
 class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListener {
 
     val TAG : String? = ChoralWorksDetailActivity::class.simpleName
     private lateinit var context : Context
-   // var toolbar: Toolbar? = null
-
+    var toolbar: Toolbar? = null
     lateinit var songDetailModel: SongDetailModel
     lateinit var adapter: VoiceTypeListAdapter
 
@@ -50,11 +50,31 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
     var selectedPrice: String = ""
     var type = 0
 
+    var choralworksdetail_txtSelectCurrency: TextView? = null
+    var choralworksdetail_txtPrice: TextView? = null
+    var choralworksdetail_btnAddToBasket: Button? = null
+    var choralworksdetail_txtWorkTitle: TextView? = null
+    var choralworksdetail_recyclerVoiceType: RecyclerView? = null
+    var total_voice_type: TextView? = null
+    var tootlbar_imgbtnShare: ImageButton? = null
+    var choralworksdetail_imgComposer: ImageView? = null
+    var layoutParent: RelativeLayout? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choral_works_detail)
         context=this@ChoralWorksDetailActivity
-      //  toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+
+        choralworksdetail_imgComposer = findViewById(R.id.choralworksdetail_imgComposer)
+        choralworksdetail_txtSelectCurrency = findViewById(R.id.choralworksdetail_txtSelectCurrency)
+        choralworksdetail_txtPrice = findViewById(R.id.choralworksdetail_txtPrice)
+        choralworksdetail_btnAddToBasket = findViewById(R.id.choralworksdetail_btnAddToBasket)
+        choralworksdetail_txtWorkTitle = findViewById(R.id.choralworksdetail_txtWorkTitle)
+        choralworksdetail_recyclerVoiceType = findViewById(R.id.choralworksdetail_recyclerVoiceType)
+        total_voice_type = findViewById(R.id.total_voice_type)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        layoutParent = findViewById(R.id.layoutParent)
+        toolbar = findViewById(R.id.toolbar)
+
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         if(intent!=null)
@@ -64,13 +84,13 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
             type = intent.getStringExtra("type")!!.toInt()
             if (type==0)
             {
-                choralworksdetail_txtSelectCurrency.visibility= View.VISIBLE
-                choralworksdetail_txtPrice.visibility = View.VISIBLE
-                choralworksdetail_btnAddToBasket.text = "Add to basket"
+                choralworksdetail_txtSelectCurrency!!.visibility= View.VISIBLE
+                choralworksdetail_txtPrice!!.visibility = View.VISIBLE
+                choralworksdetail_btnAddToBasket!!.text = "Add to basket"
             }else{
-                choralworksdetail_txtSelectCurrency.visibility= View.GONE
-                choralworksdetail_txtPrice.visibility = View.GONE
-                choralworksdetail_btnAddToBasket.text = "Get"
+                choralworksdetail_txtSelectCurrency!!.visibility= View.GONE
+                choralworksdetail_txtPrice!!.visibility = View.GONE
+                choralworksdetail_btnAddToBasket!!.text = "Get"
             }
         }
         initUI()
@@ -83,23 +103,25 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
             adapter = VoiceTypeListAdapter(context, this, songDetailModel!!.response!!.voiceType)
 
             //total_voice_type.text="("+songDetailModel!!.response!!.voiceType.size+" Voice type available.)"
-            Picasso.with(context).load(songDetailModel!!.response!!.banner_image).into(choralworksdetail_imgComposer)
+            Picasso.get()
+                .load(songDetailModel?.response?.banner_image)
+                .into(choralworksdetail_imgComposer)
             choralworksdetail_txtWorkTitle!!.text=songDetailModel!!.response!!.subtitle
-            val mLayoutManager = LinearLayoutManager(context)
-            mLayoutManager!!.orientation=LinearLayout.HORIZONTAL
+            val mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
             choralworksdetail_recyclerVoiceType!!.layoutManager=mLayoutManager
             choralworksdetail_recyclerVoiceType!!.itemAnimator= DefaultItemAnimator()
-            choralworksdetail_recyclerVoiceType.setAdapter(adapter)
+            choralworksdetail_recyclerVoiceType!!.setAdapter(adapter)
             adapter.notifyDataSetChanged()
 
 
 
             if (songDetailModel!!.response!!.voiceType.size>2)
             {
-                total_voice_type.text="("+songDetailModel!!.response!!.voiceType.size+" available. Swipe to view)"
+                total_voice_type!!.text="("+songDetailModel!!.response!!.voiceType.size+" available. Swipe to view)"
             }else
             {
-                total_voice_type.text="("+songDetailModel!!.response!!.voiceType.size+" available)"
+                total_voice_type!!.text="("+songDetailModel!!.response!!.voiceType.size+" available)"
             }
 
 
@@ -107,18 +129,18 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
             selectedCurrencyCode = songDetailModel!!.response!!.priceValue!!.get(0)!!.currencyCode
             selectedCurrencyId = songDetailModel!!.response!!.priceValue!!.get(0)!!.curid
             selectedPrice = ""+ songDetailModel!!.response!!.priceValue!!.get(0)!!.price
-            choralworksdetail_txtSelectCurrency.text = songDetailModel!!.response!!.priceValue!!.get(0)!!.currencyName
+            choralworksdetail_txtSelectCurrency!!.text = songDetailModel!!.response!!.priceValue!!.get(0)!!.currencyName
             if (Build.VERSION.SDK_INT >= 24) {
-                choralworksdetail_txtPrice.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(0)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(0)!!.price.toString(), 0)
+                choralworksdetail_txtPrice!!.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(0)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(0)!!.price.toString(), 0)
             }
             else
             {
-                choralworksdetail_txtPrice.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(0)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(0)!!.price.toString())
+                choralworksdetail_txtPrice!!.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(0)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(0)!!.price.toString())
             }
 
-            tootlbar_imgbtnShare.setOnClickListener(this)
-            choralworksdetail_txtSelectCurrency.setOnClickListener(this)
-            choralworksdetail_btnAddToBasket.setOnClickListener(this)
+            tootlbar_imgbtnShare!!.setOnClickListener(this)
+            choralworksdetail_txtSelectCurrency!!.setOnClickListener(this)
+            choralworksdetail_btnAddToBasket!!.setOnClickListener(this)
         }
     }
 
@@ -136,7 +158,7 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
         {
             if(selectedVoiceTypeId==null || selectedVoiceTypeId!!.equals(""))
             {
-                Utility.showSnakeBar(layoutParent, "Select Voice Part.")
+                Utility.showSnakeBar(layoutParent!!, "Select Voice Part.")
             }
             else
             {
@@ -164,14 +186,14 @@ class ChoralWorksDetailActivity : BaseActivity(), View.OnClickListener, APIListe
                     selectedCurrencyCode = songDetailModel!!.response!!.priceValue!!.get(which)!!.currencyCode
                     selectedCurrencyId = songDetailModel!!.response!!.priceValue!!.get(which)!!.curid
                     selectedPrice = ""+ songDetailModel!!.response!!.priceValue!!.get(which)!!.price
-                    choralworksdetail_txtSelectCurrency.text = songDetailModel!!.response!!.priceValue!!.get(which)!!.currencyName
+                    choralworksdetail_txtSelectCurrency!!.text = songDetailModel!!.response!!.priceValue!!.get(which)!!.currencyName
 
                     if (Build.VERSION.SDK_INT >= 24) {
-                        choralworksdetail_txtPrice.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(which)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(which)!!.price.toString(), 0)
+                        choralworksdetail_txtPrice!!.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(which)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(which)!!.price.toString(), 0)
                     }
                     else
                     {
-                        choralworksdetail_txtPrice.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(which)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(which)!!.price.toString())
+                        choralworksdetail_txtPrice!!.text = Html.fromHtml(songDetailModel!!.response!!.priceValue!!.get(which)!!.currencySymbol + " " + songDetailModel!!.response!!.priceValue!!.get(which)!!.price.toString())
                     }
                 }
 

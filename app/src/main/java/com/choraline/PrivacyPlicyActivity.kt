@@ -8,20 +8,28 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageButton
+import android.widget.ProgressBar
 import com.choraline.utils.Constants
 import com.choraline.utils.Utility
-import kotlinx.android.synthetic.main.activity_privacy_plicy.*
 
 class PrivacyPlicyActivity : AppCompatActivity(),View.OnClickListener {
 
     private lateinit var context: Context
+    var termsandconditions_webview : WebView? = null
+    var tootlbar_imgbtnShare : ImageButton? = null
+    var termsandconditions_progressbar : ProgressBar? = null
+    var toolbar : Toolbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_privacy_plicy)
 
         context=this@PrivacyPlicyActivity
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        toolbar = findViewById(R.id.toolbar)
+        termsandconditions_webview = findViewById(R.id.termsandconditions_webview)
+        termsandconditions_progressbar = findViewById(R.id.termsandconditions_progressbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         initUI()
@@ -32,7 +40,7 @@ class PrivacyPlicyActivity : AppCompatActivity(),View.OnClickListener {
         //termsandconditions_webview!!.setWebViewClient(WebViewClient())
         termsandconditions_webview!!.visibility= View.GONE
         termsandconditions_progressbar!!.visibility= View.VISIBLE
-        this.termsandconditions_webview.setWebViewClient(object : WebViewClient() {
+        this.termsandconditions_webview!!.setWebViewClient(object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 termsandconditions_progressbar!!.visibility= View.GONE
                 termsandconditions_webview!!.visibility= View.VISIBLE
@@ -43,7 +51,7 @@ class PrivacyPlicyActivity : AppCompatActivity(),View.OnClickListener {
         termsandconditions_webview!!.loadUrl(Constants.PRIVACY_POLICY_URL)
 
 
-        tootlbar_imgbtnShare.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

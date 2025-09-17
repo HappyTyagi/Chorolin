@@ -2,7 +2,6 @@ package com.choraline.services
 
 import android.app.*
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -11,7 +10,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
-import com.choraline.BuildConfig
 import com.choraline.R
 import com.choraline.models.Download
 import com.choraline.models.SongsData
@@ -25,7 +23,6 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-
 
 /**
  * Created by deepak Tyagi on 8/7/2017.
@@ -74,8 +71,7 @@ class DownloadService : IntentService("Download Service") {
         val file = File(filedir, "/" + fileName)
 
         AppLog.debugD(Constants.LOG_TAG, "path :: " + file.path)
-        val fileURI =
-            FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+        val fileURI = FileProvider.getUriForFile(this, "com.choraline" + ".provider", file)
         intents.setDataAndType(fileURI, "audio/*")
         intents.flags =
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION

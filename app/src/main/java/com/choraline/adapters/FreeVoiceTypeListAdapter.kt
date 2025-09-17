@@ -1,93 +1,92 @@
 package com.choraline.adapters
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.choraline.BaseActivity
 import com.choraline.FreeTrailActivity
 import com.choraline.R
 import com.choraline.models.FreeVoiceTypeData
 
+class FreeVoiceTypeListAdapter(
+    private val context: Context,
+    open var activity: BaseActivity,
+    private var websiteList: MutableList<FreeVoiceTypeData>
+) : RecyclerView.Adapter<FreeVoiceTypeListAdapter.MyViewHolder>() {
 
-import java.util.ArrayList
-import kotlinx.android.synthetic.main.row_voice_type.view.*
+    private val radioArr: IntArray = intArrayOf(
+        R.drawable.custom_radiobutton_1,
+        R.drawable.custom_radiobutton_2,
+        R.drawable.custom_radiobutton_3,
+        R.drawable.custom_radiobutton_4
+    )
 
-/**
- * Created by deepak Tyagi on 5/26/2017.
- */
+    inner class MyViewHolder(view: View, private val outer: FreeVoiceTypeListAdapter) :
+        RecyclerView.ViewHolder(view) {
 
+        private val radioCheck: RadioButton = view.findViewById(R.id.row_voicetype_radioCheck)
+        private val txtVoiceTitle: TextView = view.findViewById(R.id.row_voicetype_txtVoiceTitle)
+        private val layoutRow: LinearLayout = view.findViewById(R.id.row_voicetype_layoutRow)
 
-class FreeVoiceTypeListAdapter(private val context: Context, open var actitvity: BaseActivity, private var websiteList: List<FreeVoiceTypeData>?) : RecyclerView.Adapter<FreeVoiceTypeListAdapter.MyViewHolder>() {
+        fun bindData(data: FreeVoiceTypeData, pos: Int) {
+            // assign drawable based on voice type
+            when {
+                data.attr1.contains("Soprano", true) -> radioCheck.setButtonDrawable(outer.radioArr[0])
+                data.attr1.contains("Alto", true) -> radioCheck.setButtonDrawable(outer.radioArr[1])
+                data.attr1.contains("Tenor", true) -> radioCheck.setButtonDrawable(outer.radioArr[2])
+                data.attr1.contains("Bass", true) -> radioCheck.setButtonDrawable(outer.radioArr[3])
+            }
 
-    val radioArr: IntArray = intArrayOf(R.drawable.custom_radiobutton_1, R.drawable.custom_radiobutton_2,
-            R.drawable.custom_radiobutton_3, R.drawable.custom_radiobutton_4)
+            radioCheck.isChecked = data.isSelected
+            txtVoiceTitle.text = data.attr1
 
-     class MyViewHolder(view: View, open var outer: FreeVoiceTypeListAdapter) : RecyclerView.ViewHolder(view) {
-        lateinit  var d: FreeVoiceTypeData
-        fun bindData(data: FreeVoiceTypeData, pos: Int)
-        {
-            d=data
+            // set tags for click listeners
+            layoutRow.tag = pos
+            radioCheck.tag = pos
 
-            if(data.attr1.contains("Soprano", true))
-                itemView.row_voicetype_radioCheck.setButtonDrawable(outer.radioArr[0])
-            else if(data.attr1.contains("Alto", true))
-                itemView.row_voicetype_radioCheck.setButtonDrawable(outer.radioArr[1])
-            else if(data.attr1.contains("Tenor", true))
-                itemView.row_voicetype_radioCheck.setButtonDrawable(outer.radioArr[2])
-            else if(data.attr1.contains("Bass", true))
-                itemView.row_voicetype_radioCheck.setButtonDrawable(outer.radioArr[3])
-
-            itemView.row_voicetype_radioCheck.isChecked=data.isSelected
-            itemView.row_voicetype_txtVoiceTitle.text=data.attr1
-            itemView.row_voicetype_layoutRow.setTag(""+pos)
-            itemView.row_voicetype_radioCheck.setTag(""+pos)
-            itemView.row_voicetype_layoutRow.setOnClickListener(downloadClickListener)
-            itemView.row_voicetype_radioCheck.setOnClickListener(downloadClickListener)
-
+            layoutRow.setOnClickListener(downloadClickListener)
+            radioCheck.setOnClickListener(downloadClickListener)
         }
 
+        private val downloadClickListener = View.OnClickListener { v ->
+            val pos = v.tag.toString().toInt()
 
-         var downloadClickListener: View.OnClickListener = View.OnClickListener { v ->
-             val str = v.tag as String
-             val pos = Integer.parseInt(str)
-             for(i in 0..outer.websiteList!!.size-1)
-             {
+            // unselect all
+            for (i in outer.websiteList.indices) {
+                outer.websiteList[i].isSelected = false
+            }
 
-                 var vd=(outer.websiteList as List<FreeVoiceTypeData>)[i] as FreeVoiceTypeData
-                 vd.isSelected=false
-             }
-             ((outer.websiteList as List<FreeVoiceTypeData>)[pos] as FreeVoiceTypeData).isSelected=true
-             (outer.actitvity as FreeTrailActivity)!!.setSelectedVoiceType((outer.websiteList as List<FreeVoiceTypeData>)[pos] as FreeVoiceTypeData)
-             outer.notifyDataSetChanged()
+            // select clicked one
+            outer.websiteList[pos].isSelected = true
 
-         }
+            // notify activity
+            (outer.activity as? FreeTrailActivity)?.setSelectedVoiceType(outer.websiteList[pos])
 
-
-
+            // refresh list
+            outer.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_voice_type, parent, false)
-
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.row_voice_type, parent, false)
         return MyViewHolder(itemView, this)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val website = websiteList!![position]
-        (holder as MyViewHolder).bindData(website, position)
+        holder.bindData(websiteList[position], position)
     }
 
-    override fun getItemCount(): Int {
-        return websiteList!!.size
-    }
+    override fun getItemCount(): Int = websiteList.size
 
-    fun refreshList(websiteList: ArrayList<FreeVoiceTypeData>) {
-        this.websiteList = websiteList
+    fun refreshList(newList: List<FreeVoiceTypeData>) {
+        websiteList.clear()
+        websiteList.addAll(newList)
         notifyDataSetChanged()
     }
-
-
 }

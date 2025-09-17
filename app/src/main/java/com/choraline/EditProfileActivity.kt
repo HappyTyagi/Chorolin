@@ -8,6 +8,9 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.RelativeLayout
 import com.choraline.models.*
 import com.choraline.network.APIListener
 import com.choraline.network.Webservices
@@ -16,7 +19,6 @@ import com.choraline.utils.Constants
 import com.choraline.utils.Utility
 import com.google.gson.Gson
 
-import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
 
@@ -24,11 +26,57 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
     private lateinit var data: UserData
     var countryList = ArrayList<CountryData>()
     var selectedCountryId: String = ""
+    var  toolbar: Toolbar? = null
+
+
+    var  edtprofile_edtFirstName: EditText? = null
+    var  edtprofile_edtLastName: EditText? = null
+    var  edtprofile_edtEmail: EditText? = null
+    var  edtprofile_edtAddress1: EditText? = null
+    var  edtprofile_edtAddress2: EditText? = null
+    var  edtprofile_edtTown: EditText? = null
+    var  edtprofile_edtPostCode: EditText? = null
+    var  edtprofile_edtCountry: EditText? = null
+    var  edtprofile_edtConfirmEmail: EditText? = null
+    var  edtprofile_edtTelephone: EditText? = null
+    var  edtprofile_edtNameOfYourChoir: EditText? = null
+
+    var  tootlbar_imgbtnShare: ImageButton? = null
+    var  edtprofile_OldPassword: EditText? = null
+    var  edtprofile_btnSubmit: EditText? = null
+
+
+
+    var  edtprofile_edtConfirmPassword: EditText? = null
+    var  edtprofile_edtPassword: EditText? = null
+    var  layoutParent: RelativeLayout? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
         context=this@EditProfileActivity
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+         toolbar = findViewById(R.id.toolbar)
+
+        edtprofile_edtConfirmPassword = findViewById(R.id.edtprofile_edtConfirmPassword)
+        edtprofile_OldPassword = findViewById(R.id.edtprofile_OldPassword)
+        edtprofile_edtPassword = findViewById(R.id.edtprofile_edtPassword)
+        edtprofile_edtFirstName = findViewById(R.id.edtprofile_edtFirstName)
+        edtprofile_edtLastName = findViewById(R.id.edtprofile_edtLastName)
+        edtprofile_edtEmail = findViewById(R.id.edtprofile_edtEmail)
+        edtprofile_edtAddress1 = findViewById(R.id.edtprofile_edtAddress1)
+        edtprofile_edtAddress2 = findViewById(R.id.edtprofile_edtAddress2)
+        edtprofile_edtTown = findViewById(R.id.edtprofile_edtTown)
+        edtprofile_edtPostCode = findViewById(R.id.edtprofile_edtPostCode)
+        edtprofile_edtCountry = findViewById(R.id.edtprofile_edtCountry)
+        edtprofile_edtTelephone = findViewById(R.id.edtprofile_edtTelephone)
+        edtprofile_edtNameOfYourChoir = findViewById(R.id.edtprofile_edtNameOfYourChoir)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        edtprofile_btnSubmit = findViewById(R.id.edtprofile_btnSubmit)
+        layoutParent = findViewById(R.id.layoutParent)
+        edtprofile_edtConfirmEmail = findViewById(R.id.edtprofile_edtConfirmEmail)
+
+
+
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         var strCountry = AppController!!.appPref!!.countryData
@@ -59,9 +107,9 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
     {
         setData()
 
-        tootlbar_imgbtnShare.setOnClickListener(this)
-        edtprofile_edtCountry.setOnClickListener(this)
-        edtprofile_btnSubmit.setOnClickListener(this)
+        tootlbar_imgbtnShare!!.setOnClickListener(this)
+        edtprofile_edtCountry!!.setOnClickListener(this)
+        edtprofile_btnSubmit!!.setOnClickListener(this)
     }
 
 
@@ -70,16 +118,18 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
         var gson= Gson()
         data=gson!!.fromJson(AppController.appPref.userData, UserData::class.java)
 
-        edtprofile_edtFirstName.setText(data.firstname)
-        edtprofile_edtLastName.setText(data.lastname)
-        edtprofile_edtEmail.setText(data.email)
-        edtprofile_edtAddress1.setText(data.addess1)
-        edtprofile_edtAddress2.setText(data.addess2)
-        edtprofile_edtTown.setText(data.town)
-        edtprofile_edtPostCode.setText(data.postcode)
-        edtprofile_edtCountry.setText(data.country)
-        edtprofile_edtTelephone.setText(data.telephone)
-        edtprofile_edtNameOfYourChoir.setText(data.choir)
+
+
+        edtprofile_edtFirstName!!.setText(data.firstname)
+        edtprofile_edtLastName!!.setText(data.lastname)
+        edtprofile_edtEmail!!.setText(data.email)
+        edtprofile_edtAddress1!!.setText(data.addess1)
+        edtprofile_edtAddress2!!.setText(data.addess2)
+        edtprofile_edtTown!!.setText(data.town)
+        edtprofile_edtPostCode!!.setText(data.postcode)
+        edtprofile_edtCountry!!.setText(data.country)
+        edtprofile_edtTelephone!!.setText(data.telephone)
+        edtprofile_edtNameOfYourChoir!!.setText(data.choir)
 
     }
 
@@ -104,61 +154,61 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
 
     fun validate() : Boolean
     {
-        if(edtprofile_edtFirstName.text.toString().equals(""))
+        if(edtprofile_edtFirstName!!.text.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter Your First Name.")
-            edtprofile_edtFirstName.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Enter Your First Name.")
+            edtprofile_edtFirstName!!.requestFocus()
             return false
         }
-        if(edtprofile_edtLastName.text.toString().equals(""))
+        if(edtprofile_edtLastName!!.text.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter Your Last Name.")
-            edtprofile_edtLastName.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Enter Your Last Name.")
+            edtprofile_edtLastName!!.requestFocus()
             return false
         }
-        if(edtprofile_edtEmail.text.toString().equals(""))
+        if(edtprofile_edtEmail!!.text.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter your Email.")
-            edtprofile_edtEmail.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Enter your Email.")
+            edtprofile_edtEmail!!.requestFocus()
             return false
         }
         if(!Utility!!.isValidEmail(edtprofile_edtEmail!!.text!!.toString()))
         {
-            Utility!!.showSnakeBar(layoutParent, "Enter a valid Email.")
-            edtprofile_edtEmail.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Enter a valid Email.")
+            edtprofile_edtEmail!!.requestFocus()
             return false
         }
-        if(!edtprofile_edtEmail.text.toString().equals(data!!.email))
+        if(!edtprofile_edtEmail!!.text.toString().equals(data!!.email))
         {
-            if(edtprofile_edtConfirmEmail.text.toString().equals(""))
+            if(edtprofile_edtConfirmEmail!!.text.toString().equals(""))
             {
-                Utility!!.showSnakeBar(layoutParent, "Please check that you have entered your Email address correctly")
-                edtprofile_edtEmail.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Please check that you have entered your Email address correctly")
+                edtprofile_edtEmail!!.requestFocus()
                 return false
             }
-            else if(!edtprofile_edtConfirmEmail.text.toString().equals(edtprofile_edtEmail!!.text!!.toString()))
+            else if(!edtprofile_edtConfirmEmail!!.text.toString().equals(edtprofile_edtEmail!!.text!!.toString()))
             {
-                Utility!!.showSnakeBar(layoutParent, "Please check that you have enter wrong confirm Email.")
-                edtprofile_edtEmail.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Please check that you have enter wrong confirm Email.")
+                edtprofile_edtEmail!!.requestFocus()
                 return false
             }
 
         }
-        if(edtprofile_edtEmail.text.toString().equals(data!!.email) && !edtprofile_edtConfirmEmail.text.toString().equals("")
-                && !edtprofile_edtConfirmEmail.text.toString().equals(data!!.email))
+        if(edtprofile_edtEmail!!.text.toString().equals(data!!.email) && !edtprofile_edtConfirmEmail!!.text.toString().equals("")
+                && !edtprofile_edtConfirmEmail!!.text.toString().equals(data!!.email))
         {
-            Utility!!.showSnakeBar(layoutParent, "Please check that you have enter wrong confirm Email.")
-            edtprofile_edtEmail.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Please check that you have enter wrong confirm Email.")
+            edtprofile_edtEmail!!.requestFocus()
             return false
         }
 
 
 
-        if(!(edtprofile_edtEmail.text.toString().equals(data!!.email) && !edtprofile_edtConfirmEmail.text.toString().equals("")
-                && !edtprofile_edtConfirmEmail.text.toString().equals(data!!.email)))
+        if(!(edtprofile_edtEmail!!.text.toString().equals(data!!.email) && !edtprofile_edtConfirmEmail!!.text.toString().equals("")
+                && !edtprofile_edtConfirmEmail!!.text.toString().equals(data!!.email)))
         {
-            if (edtprofile_OldPassword.text.toString().isEmpty()) {
-                Utility!!.showSnakeBar(layoutParent, "Please enter current password.")
+            if (edtprofile_OldPassword!!.text.toString().isEmpty()) {
+                Utility!!.showSnakeBar(layoutParent!!, "Please enter current password.")
                 return false
             }
 
@@ -167,46 +217,50 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
 
 
         if (edtprofile_edtPassword!!.text!!.toString().length>0) {
-            if (edtprofile_OldPassword.text.toString().isEmpty()) {
-                Utility!!.showSnakeBar(layoutParent, "Current Password can not be less than 6 digits.")
+            if (edtprofile_OldPassword!!.text.toString().isEmpty()) {
+                Utility!!.showSnakeBar(layoutParent!!, "Current Password can not be less than 6 digits.")
                 return false
             }
         }
+
+
+
+
         if(!edtprofile_edtPassword!!.text!!.toString().equals(""))
         {
             if(edtprofile_edtPassword!!.text!!.toString()!!.length<6)
             {
-                Utility!!.showSnakeBar(layoutParent, "Password can not be less than 6 digits.")
-                edtprofile_edtPassword.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Password can not be less than 6 digits.")
+                edtprofile_edtPassword!!.requestFocus()
                 return false
             }
             if(edtprofile_edtConfirmPassword!!.text!!.toString().equals(""))
             {
-                Utility!!.showSnakeBar(layoutParent, "Please re-enter Password to confirm.")
-                edtprofile_edtConfirmPassword.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Please re-enter Password to confirm.")
+                edtprofile_edtConfirmPassword!!.requestFocus()
                 return false
             }
             if(!edtprofile_edtPassword!!.text!!.toString().equals(edtprofile_edtConfirmPassword!!.text!!.toString()))
             {
-                Utility!!.showSnakeBar(layoutParent, "Confirm Password does not match.")
-                edtprofile_edtPassword.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Confirm Password does not match.")
+                edtprofile_edtPassword!!.requestFocus()
                 return false
             }
         }
         if(edtprofile_edtPassword!!.text!!.toString().equals("") && !edtprofile_edtConfirmPassword!!.text!!.toString().equals(""))
         {
-            Utility!!.showSnakeBar(layoutParent, "Please enter Password first")
-            edtprofile_edtPassword.requestFocus()
+            Utility!!.showSnakeBar(layoutParent!!, "Please enter Password first")
+            edtprofile_edtPassword!!.requestFocus()
             return false
         }
 
 
-        if(!edtprofile_edtTelephone.text.toString().equals(""))
+        if(!edtprofile_edtTelephone!!.text.toString().equals(""))
         {
-            if(edtprofile_edtTelephone.text.toString().length<7)
+            if(edtprofile_edtTelephone!!.text.toString().length<7)
             {
-                Utility!!.showSnakeBar(layoutParent, "Telephone should not be less than 7 digits")
-                edtprofile_edtTelephone.requestFocus()
+                Utility!!.showSnakeBar(layoutParent!!, "Telephone should not be less than 7 digits")
+                edtprofile_edtTelephone!!.requestFocus()
                 return false
             }
         }
@@ -226,7 +280,7 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
                         edtprofile_edtLastName!!.text!!.toString(),
                 edtprofile_edtEmail!!.text!!.toString(),
                         edtprofile_edtConfirmEmail!!.text!!.toString(),
-                        edtprofile_OldPassword.text.toString(),
+                        edtprofile_OldPassword!!.text.toString(),
                 edtprofile_edtPassword!!.text!!.toString(),
                 edtprofile_edtConfirmPassword!!.text!!.toString(), edtprofile_edtAddress1!!.text!!.toString(),
                 edtprofile_edtAddress2!!.text!!.toString(), edtprofile_edtTown!!.text!!.toString(),
@@ -306,7 +360,7 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
             }
             else
             {
-                Utility!!.showSnakeBar(layoutParent, result!!.message)
+                Utility!!.showSnakeBar(layoutParent!!, result!!.message)
             }
         }
         if(api==Constants.API_GET_PROFILE)

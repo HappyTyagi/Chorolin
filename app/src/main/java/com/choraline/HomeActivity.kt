@@ -1,6 +1,5 @@
 package com.choraline
 
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -13,10 +12,14 @@ import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.choraline.adapters.ComposersListAdapter
 import com.choraline.models.*
@@ -27,12 +30,7 @@ import com.choraline.network.Webservices
 import com.choraline.utils.*
 import com.example.example.ForceUpdateResponse
 import com.google.gson.Gson
-import com.saadahmedsoft.popupdialog.PopupDialog
-import com.saadahmedsoft.popupdialog.Styles
-import com.saadahmedsoft.popupdialog.listener.OnDialogButtonClickListener
 
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.content_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,6 +42,12 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
     val TAG: String = HomeActivity::class.simpleName!!.toString()
     private lateinit var context: Context
     var toolbar: Toolbar? = null
+    var home_swipe: SwipeRefreshLayout? = null
+    var layoutParent: RelativeLayout? = null
+    var tootlbar_txtBasketCount: TextView? = null
+    var tootlbar_layoutBasket: RelativeLayout? = null
+    var tootlbar_imgbtnShare: ImageButton? = null
+    var home_recyclerComposer: RecyclerView? = null
     var drawer: DrawerLayout? = null;
     var navigationView: NavigationView? = null
     var toggle: ActionBarDrawerToggle? = null
@@ -62,7 +66,14 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
         checkForUpdate()
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
+
+        layoutParent = findViewById(R.id.layoutParent)
+        tootlbar_txtBasketCount = findViewById(R.id.tootlbar_txtBasketCount)
+        toolbar = findViewById(R.id.toolbar)
+        tootlbar_layoutBasket = findViewById(R.id.tootlbar_layoutBasket)
+        home_swipe = findViewById(R.id.home_swipe)
+        tootlbar_imgbtnShare = findViewById(R.id.tootlbar_imgbtnShare)
+        home_recyclerComposer = findViewById(R.id.home_recyclerComposer)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupDrawer()
@@ -78,34 +89,6 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
         }
         adapter = ComposersListAdapter(context, this@HomeActivity, composerList)
         initUI()
-
-
-//        if (Utility.getPopUp(this).equals("1")) {
-//        } else {
-
-        PopupDialog.getInstance(this)
-            .setStyle(Styles.ALERT)
-            .setHeading("Information!")
-            .setDismissButtonText("OK")
-            .setDismissButtonTextColor(R.color.white)
-            .setDismissButtonTextColor(R.color.white)
-            .setDismissButtonBackground(R.color.colorPrimary)
-            .setDescription(
-                "Any music in the Downloads section will have to be moved across again from the Purchased section. \n" +
-                        "      Thank You"
-            )
-            .setCancelable(false)
-            .showDialog(object : OnDialogButtonClickListener() {
-                override fun onDismissClicked(dialog: Dialog?) {
-                    super.onDismissClicked(dialog)
-                }
-            })
-
-
-//            Utility.setPopup(this, "1")
-//        }
-
-
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -243,9 +226,9 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
     fun initUI() {
         val mLayoutManager = GridLayoutManager(context, 3)
-        home_recyclerComposer.setLayoutManager(mLayoutManager)
+        home_recyclerComposer!!.setLayoutManager(mLayoutManager)
         val spacingInPixels = 25
-        home_recyclerComposer.addItemDecoration(
+        home_recyclerComposer!!.addItemDecoration(
             GridSpacingItemDecoration(
                 3,
                 spacingInPixels,
@@ -253,7 +236,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
                 0
             )
         )
-        home_recyclerComposer.setAdapter(adapter)
+        home_recyclerComposer!!.setAdapter(adapter)
 
         val strBasket = AppController.appPref.basketData
         if (!strBasket.equals(" ")) {
@@ -293,7 +276,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
                 intents.putExtra("data", Gson().toJson(basketData))
                 startActivity(intents)
             } else {
-                Utility!!.showSnakeBar(layoutParent, "Your Basket is Empty");
+                Utility!!.showSnakeBar(layoutParent!!, "Your Basket is Empty");
             }
         }
     }
@@ -304,7 +287,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
     fun getComposerList() {
-        home_recyclerComposer.visibility = View.INVISIBLE
+        home_recyclerComposer!!.visibility = View.INVISIBLE
 
         Webservices(
             context,
@@ -378,7 +361,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
             if (basketData!!.response != null) {
                 if (basketData!!.response!!.list != null && basketData!!.response!!.list!!.size > 0) {
                     tootlbar_txtBasketCount!!.visibility = View.VISIBLE
-                    tootlbar_txtBasketCount.setText("" + basketData!!.response!!.list.size)
+                    tootlbar_txtBasketCount!!.setText("" + basketData!!.response!!.list.size)
                 } else {
                     tootlbar_txtBasketCount!!.visibility = View.GONE
                 }
@@ -392,7 +375,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
     override fun onApiSuccess(obj: Any, api: Int) {
 
-        home_recyclerComposer.visibility = View.VISIBLE
+        home_recyclerComposer!!.visibility = View.VISIBLE
         if (api == Constants.API_COMPOSER_LIST) {
             if (home_swipe!!.isRefreshing)
                 home_swipe!!.isRefreshing = false
@@ -487,7 +470,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
     override fun onApiFailure(throwable: Throwable, api: Int) {
-        home_recyclerComposer.visibility = View.VISIBLE
+        home_recyclerComposer!!.visibility = View.VISIBLE
         if (home_swipe!!.isRefreshing)
             home_swipe!!.isRefreshing = false
         if (api == Constants.API_COMPOSER_LIST) getComposerListFromdb()
