@@ -57,19 +57,23 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
-        if (newVersion == 2 && oldVersion== 1)
+        if (newVersion == 3 && oldVersion== 2)
             db!!.execSQL("ALTER TABLE "+Entry.COMPOSER_TABLE_NAME+" ADD COLUMN "+Entry.CUSTOMER_TYPE+" INTEGER DEFAULT 0")
     }
 
 
     companion object {
         const val DATABASE_NAME = "Choraline.db"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
         val TAG = "DatabaseHandler"
     }
 
 
     fun insertComposerListAndUpdate(composerList: ArrayList<ComposerData>, updatedComposerList: ArrayList<ComposerData>, deletdList: ArrayList<ComposerData>) {
+
+      try{
+
+
         val sqLiteDatabase = AppController.dbInstance.writableDatabase
 
         for (data in deletdList) sqLiteDatabase.delete(Entry.COMPOSER_TABLE_NAME, Entry.ID + "=?", arrayOf(data.scid))
@@ -82,7 +86,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 put(Entry.BANNER_IMAGE_URL, data.bannerImage)
                 put(Entry.CUSTOMER_TYPE, data.freeStatus)
             }
-            val ss = sqLiteDatabase.insert(Entry.COMPOSER_TABLE_NAME, null, values)
+//            val ss = sqLiteDatabase.insert(Entry.COMPOSER_TABLE_NAME, null, values)
            // Log.d(TAG, "111111111111111111111111111111======" + ss)
         }
 
@@ -95,12 +99,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 put(Entry.CUSTOMER_TYPE, data.freeStatus)
             }
 
-            val count = sqLiteDatabase.update(Entry.COMPOSER_TABLE_NAME, values, Entry.ID + "=?", arrayOf(data.scid))
+//            val count = sqLiteDatabase.update(Entry.COMPOSER_TABLE_NAME, values, Entry.ID + "=?", arrayOf(data.scid))
 
-           // Log.d(TAG, "111111111111111111111111111111======" + count)
         }
         sqLiteDatabase.close()
 
+      }catch (e: Exception){
+
+      }
     }
 
 
