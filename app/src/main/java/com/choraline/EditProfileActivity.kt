@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RelativeLayout
@@ -43,7 +44,7 @@ class EditProfileActivity : BaseActivity(), View.OnClickListener, APIListener{
 
     var  tootlbar_imgbtnShare: ImageButton? = null
     var  edtprofile_OldPassword: EditText? = null
-    var  edtprofile_btnSubmit: EditText? = null
+    var  edtprofile_btnSubmit: Button? = null
 
 
 

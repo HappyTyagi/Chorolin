@@ -273,7 +273,6 @@ class MusicPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
         player!!.seekTo(posn)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun go() {
         mState = State.Playing
         player!!.start()
@@ -358,7 +357,9 @@ class MusicPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
     private var views: RemoteViews? = null
     private var bigViews: RemoteViews? = null
     private fun showNotification() {
-        // Using RemoteViews to bind custom layouts into Notification
+
+        try{
+
         views = RemoteViews(packageName,
                 R.layout.status_bar)
         bigViews = RemoteViews(packageName,
@@ -458,11 +459,12 @@ class MusicPlayerService : Service(), MediaPlayer.OnPreparedListener, MediaPlaye
                 .build()
 
         status.flags = Notification.FLAG_ONGOING_EVENT
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
-        {
-         //  notificationmanager.notify(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,status)
-        }
+
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, status)
+
+        }catch (e: Exception){
+
+        }
     }
 
 

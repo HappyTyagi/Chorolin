@@ -106,15 +106,17 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
     fun getComposerList(): ArrayList<ComposerData> {
         val list = ArrayList<ComposerData>()
+
+        try{
         val sqLiteDatabase = AppController.dbInstance.writableDatabase
         var cursor = sqLiteDatabase.query(Entry.COMPOSER_TABLE_NAME, null, null, null, null, null, null)!!
 
         while (cursor.moveToNext()) {
-            val id = cursor.getString(cursor.getColumnIndex(Entry.ID))
-            val title = cursor.getString(cursor.getColumnIndex(Entry.TITLE))
-            val composerImage = cursor.getString(cursor.getColumnIndex(Entry.COMPOSER_IMAGE_URL))
-            val bannerImage = cursor.getString(cursor.getColumnIndex(Entry.BANNER_IMAGE_URL))
-            val type = cursor.getString(cursor.getColumnIndex(Entry.CUSTOMER_TYPE))
+            val id = cursor.getString(cursor.getColumnIndexOrThrow(Entry.ID))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(Entry.TITLE))
+            val composerImage = cursor.getString(cursor.getColumnIndexOrThrow(Entry.COMPOSER_IMAGE_URL))
+            val bannerImage = cursor.getString(cursor.getColumnIndexOrThrow(Entry.BANNER_IMAGE_URL))
+            val type = cursor.getString(cursor.getColumnIndexOrThrow(Entry.CUSTOMER_TYPE))
 
             val composerData = ComposerData()
             composerData.scid = id
@@ -122,14 +124,12 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
             composerData.composerImage = composerImage
             composerData.bannerImage = bannerImage
             composerData.freeStatus = type
-          //  Log.d(TAG, "id=" + id + " title=" + title + " composerImage = " + composerImage + " bannerImage = " + bannerImage)
             list.add(composerData)
 
         }
-
-
         sqLiteDatabase.close()
-
+        }catch (e:Exception){
+        }
         return list
 
     }
@@ -207,7 +207,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val sqLiteDatabase = AppController.dbInstance.writableDatabase
         val cursor = sqLiteDatabase.query(Entry.COMPOSER_SONG_TABLE_NAME, null, Entry.TITLE + "=?", arrayOf(title), null, null, null, "1")
         if (cursor.moveToNext()) {
-            time = cursor.getString(cursor.getColumnIndex(Entry.TIME_STAMP))
+            time = cursor.getString(cursor.getColumnIndexOrThrow(Entry.TIME_STAMP))
         }
 
         return time
@@ -236,9 +236,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         while (cursor.moveToNext()) {
 
             val songObj = JSONObject()
-            songObj.put("albumId", cursor.getString(cursor.getColumnIndex(Entry.ALBUM_ID)))
-            songObj.put("song_name", cursor.getString(cursor.getColumnIndex(Entry.SONG_NAME)))
-            val songType = cursor.getInt(cursor.getColumnIndex(Entry.IS_PAID_SONG))
+            songObj.put("albumId", cursor.getString(cursor.getColumnIndexOrThrow(Entry.ALBUM_ID)))
+            songObj.put("song_name", cursor.getString(cursor.getColumnIndexOrThrow(Entry.SONG_NAME)))
+            val songType = cursor.getInt(cursor.getColumnIndexOrThrow(Entry.IS_PAID_SONG))
             if (songType==Entry.PAID_SONG_WITHOUT_SINGER)
             arrayWithoutSinger.put(songObj)
             else if (songType==Entry.PAID_SONG_WITH_SINGER)
@@ -301,19 +301,19 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
         while (cursor.moveToNext()) {
             val model = OrderHistoryData()
-            model.order_id = cursor.getString(cursor.getColumnIndex(Entry.ORDER_ID))
-            model.order_date = cursor.getString(cursor.getColumnIndex(Entry.ORDER_DATE))
-            model.discount_percentage = cursor.getString(cursor.getColumnIndex(Entry.DISCOUNT))
-            model.subtotal = cursor.getString(cursor.getColumnIndex(Entry.SUBTOTAL))
-            model.currency_symbol = cursor.getString(cursor.getColumnIndex(Entry.CURRENCY_SYMBOL))
+            model.order_id = cursor.getString(cursor.getColumnIndexOrThrow(Entry.ORDER_ID))
+            model.order_date = cursor.getString(cursor.getColumnIndexOrThrow(Entry.ORDER_DATE))
+            model.discount_percentage = cursor.getString(cursor.getColumnIndexOrThrow(Entry.DISCOUNT))
+            model.subtotal = cursor.getString(cursor.getColumnIndexOrThrow(Entry.SUBTOTAL))
+            model.currency_symbol = cursor.getString(cursor.getColumnIndexOrThrow(Entry.CURRENCY_SYMBOL))
             val listType = object : TypeToken<ArrayList<OrderHistoryItemData>>() {
 
             }.type
             //val listType = TypeToken<ArrayList<ChoralWorksModel>>().type
-            model.list = Gson().fromJson(cursor.getString(cursor.getColumnIndex(Entry.ORDER_DATA)), listType);
+            model.list = Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(Entry.ORDER_DATA)), listType);
             list.add(model)
 
-            Log.d(TAG, "order_id->" + model.order_id + "  model.list->" + cursor.getString(cursor.getColumnIndex(Entry.ORDER_DATA)))
+            Log.d(TAG, "order_id->" + model.order_id + "  model.list->" + cursor.getString(cursor.getColumnIndexOrThrow(Entry.ORDER_DATA)))
         }
 
 
@@ -360,14 +360,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val albumCursor = sqLiteDatabase.query(Entry.PURCHASED_ALBUM_LIST_TABLE_NAME, null, null, null, null, null, null)
         //Log.d(TAG, "-----------------------getPurchaseSongList---------------------------")
         while (albumCursor.moveToNext()) {
-            val purchaseId = albumCursor.getString(albumCursor.getColumnIndex(Entry.PURCHASED_ID))
+            val purchaseId = albumCursor.getString(albumCursor.getColumnIndexOrThrow(Entry.PURCHASED_ID))
           //  Log.d(TAG, "--------------111---------getPurchaseSongList---------------------------")
             val purchasedMusicData = PurchasedMusicData()
             purchasedMusicData.id = purchaseId
-            purchasedMusicData.title = albumCursor.getString(albumCursor.getColumnIndex(Entry.TITLE))
-            purchasedMusicData.subtitle = albumCursor.getString(albumCursor.getColumnIndex(Entry.SUBTITLE))
-            purchasedMusicData.voiceType = albumCursor.getString(albumCursor.getColumnIndex(Entry.VOICE_TYPE))
-            purchasedMusicData.dateCreated = albumCursor.getString(albumCursor.getColumnIndex(Entry.DATE_CREATED))
+            purchasedMusicData.title = albumCursor.getString(albumCursor.getColumnIndexOrThrow(Entry.TITLE))
+            purchasedMusicData.subtitle = albumCursor.getString(albumCursor.getColumnIndexOrThrow(Entry.SUBTITLE))
+            purchasedMusicData.voiceType = albumCursor.getString(albumCursor.getColumnIndexOrThrow(Entry.VOICE_TYPE))
+            purchasedMusicData.dateCreated = albumCursor.getString(albumCursor.getColumnIndexOrThrow(Entry.DATE_CREATED))
 
             val sonlist = ArrayList<SongsData>()
 
@@ -377,9 +377,9 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
             while (cursor.moveToNext()) {
 
                 val songData = SongsData()
-                songData.songTitle = cursor.getString(cursor.getColumnIndex(Entry.SONG_TITLE))
+                songData.songTitle = cursor.getString(cursor.getColumnIndexOrThrow(Entry.SONG_TITLE))
 
-                songData.songUrl = cursor.getString(cursor.getColumnIndex(Entry.SONG_URL))
+                songData.songUrl = cursor.getString(cursor.getColumnIndexOrThrow(Entry.SONG_URL))
                 sonlist.add(songData)
             }
 
@@ -415,8 +415,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val data = SongsData()
      if (cursor.moveToNext())
      {
-         data.id=cursor.getString(cursor.getColumnIndex(Entry.ID))
-         data.songUrl = cursor.getString(cursor.getColumnIndex(Entry.SONG_URL))
+         data.id=cursor.getString(cursor.getColumnIndexOrThrow(Entry.ID))
+         data.songUrl = cursor.getString(cursor.getColumnIndexOrThrow(Entry.SONG_URL))
      }
         return data
     }

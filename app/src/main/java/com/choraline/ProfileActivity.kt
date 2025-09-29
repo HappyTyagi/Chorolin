@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.choraline.models.LoginModel
 import com.choraline.models.UserData
@@ -30,16 +31,16 @@ class ProfileActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout
     var profile_btnEditProfile : Button? = null
     var profile_swipRefreshLayout : SwipeRefreshLayout? = null
 
-    var profile_txtFirstName : EditText? = null
-    var profile_txtLastName : EditText? = null
-    var profile_txtEmail : EditText? = null
-    var profile_txtAddress1 : EditText? = null
-    var profile_txtAddress2 : EditText? = null
-    var profile_txtTown : EditText? = null
-    var profile_txtPostcode : EditText? = null
-    var profile_txtCountry : EditText? = null
-    var profile_txtTelephone : EditText? = null
-    var profile_txtChoir : EditText? = null
+    var profile_txtFirstName : TextView? = null
+    var profile_txtLastName : TextView? = null
+    var profile_txtEmail : TextView? = null
+    var profile_txtAddress1 : TextView? = null
+    var profile_txtAddress2 : TextView? = null
+    var profile_txtTown : TextView? = null
+    var profile_txtPostcode : TextView? = null
+    var profile_txtCountry : TextView? = null
+    var profile_txtTelephone : TextView? = null
+    var profile_txtChoir : TextView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
