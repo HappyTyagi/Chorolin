@@ -57,11 +57,23 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
-        if (newVersion == 3 && oldVersion== 2)
-            db!!.execSQL("ALTER TABLE "+Entry.COMPOSER_TABLE_NAME+" ADD COLUMN "+Entry.CUSTOMER_TYPE+" INTEGER DEFAULT 0")
+
+        if (!columnExists(db!!, "composerlist", "type")) {
+            db.execSQL("ALTER TABLE composerlist ADD COLUMN type INTEGER DEFAULT 0")
+        }
     }
 
-
+    private fun columnExists(db: SQLiteDatabase, tableName: String, columnName: String): Boolean {
+        db.rawQuery("PRAGMA table_info($tableName)", null).use { cursor ->
+            val nameIndex = cursor.getColumnIndex("name")
+            while (cursor.moveToNext()) {
+                if (cursor.getString(nameIndex).equals(columnName, ignoreCase = true)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
     companion object {
         const val DATABASE_NAME = "Choraline.db"
         const val DATABASE_VERSION = 3
@@ -75,7 +87,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
         val sqLiteDatabase = AppController.dbInstance.writableDatabase
-
         for (data in deletdList) sqLiteDatabase.delete(Entry.COMPOSER_TABLE_NAME, Entry.ID + "=?", arrayOf(data.scid))
 
         for (data in composerList) {
@@ -86,8 +97,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 put(Entry.BANNER_IMAGE_URL, data.bannerImage)
                 put(Entry.CUSTOMER_TYPE, data.freeStatus)
             }
-//            val ss = sqLiteDatabase.insert(Entry.COMPOSER_TABLE_NAME, null, values)
-           // Log.d(TAG, "111111111111111111111111111111======" + ss)
+            val ss = sqLiteDatabase.insert(Entry.COMPOSER_TABLE_NAME, null, values)
+            Log.d(TAG, "111111111111111111111111111111======" + ss)
         }
 
         for (data in updatedComposerList) {
@@ -99,12 +110,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 put(Entry.CUSTOMER_TYPE, data.freeStatus)
             }
 
-//            val count = sqLiteDatabase.update(Entry.COMPOSER_TABLE_NAME, values, Entry.ID + "=?", arrayOf(data.scid))
-
+            val count = sqLiteDatabase.update(Entry.COMPOSER_TABLE_NAME, values, Entry.ID + "=?", arrayOf(data.scid))
+            Log.d(TAG, "111111111111111111111111111111=====" + count)
         }
         sqLiteDatabase.close()
 
       }catch (e: Exception){
+          Log.d(TAG, "111111111111111111111111111111=====" + e)
 
       }
     }
@@ -136,6 +148,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         sqLiteDatabase.close()
         }catch (e:Exception){
         }
+        System.out.println("getComposerList------" + list.size)
         return list
 
     }

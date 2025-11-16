@@ -296,12 +296,6 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
             "Please wait..."
         ).callGetComposerListAPI(Constants.API_COMPOSER_LIST)
 
-        /*  if (list.size==0) {
-              Webservices(context, this, !(home_swipe!!.isRefreshing), "Please wait...").callGetComposerListAPI(Constants.API_COMPOSER_LIST)
-          }else{
-              composerList.addAll(list)
-              if (adapter!=null) adapter.notifyDataSetChanged()
-          }*/
     }
 
     fun getBasket() {
@@ -396,7 +390,6 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
                     insertAsync.execute(list)
 
-                    // AppController.dbInstance.insertComposerListAndUpdate(result!!.response!!.composerList,result!!.response!!.updatedList,result!!.response!!.deletedList)
                 }
             }
 
@@ -535,7 +528,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
 
     private fun checkForUpdateView(versionData: Int?) {
-        if (versionData!! < 54) {
+        if (versionData!! < 56) {
             val updateBottomSheet = UpdateBottomSheet()
             updateBottomSheet.show(supportFragmentManager, "UpdateBottomSheet")
         }

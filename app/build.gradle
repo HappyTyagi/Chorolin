@@ -10,8 +10,8 @@ android {
         applicationId "com.choraline"
         minSdkVersion 24
         targetSdk 35
-        versionCode 54
-        versionName "54.0.1"
+        versionCode 56
+        versionName "56.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -63,6 +63,7 @@ dependencies {
     }
 
 
+    implementation 'com.android.billingclient:billing:8.1.0'
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.appcompat:appcompat:1.7.1'
@@ -74,7 +75,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation 'androidx.work:work-runtime-ktx:2.10.4'
+    implementation 'androidx.work:work-runtime-ktx:2.11.0'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "com.squareup.retrofit2:retrofit:2.11.0"
