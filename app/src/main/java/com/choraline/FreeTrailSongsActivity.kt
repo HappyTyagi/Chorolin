@@ -27,6 +27,7 @@ import com.choraline.services.MusicPlayerService
 import com.choraline.utils.AppController
 import com.choraline.utils.Constants
 import com.google.android.material.snackbar.Snackbar
+import java.util.Locale
 
 
 class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayerService.updatePrepared {
@@ -175,7 +176,7 @@ class FreeTrailSongsActivity : BaseActivity(), View.OnClickListener, MusicPlayer
             }
         }
 
-        freetrailsongs_txtVoiceType!!.setText(selectedVoice.toUpperCase())
+        freetrailsongs_txtVoiceType!!.setText(selectedVoice.uppercase(Locale.getDefault()))
         adapter= SongsListAdapter(context, this@FreeTrailSongsActivity, songList,0)
         val toolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)

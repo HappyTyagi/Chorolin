@@ -31,6 +31,10 @@ class BasketItemData {
     @SerializedName("price")
     @Expose
     var price: String = ""
+
+    @SerializedName("barcode")
+    @Expose
+    var barcode: String = ""
     //with_singer
 
     @SerializedName("with_singer")

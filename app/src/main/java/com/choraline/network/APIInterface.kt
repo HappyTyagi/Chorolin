@@ -156,7 +156,7 @@ interface APIInterface {
     @POST(Constants.GET_BASKET_URL)
     fun getBasket(@Field("userId") userId: String,
                   @Field("access_token") accessToken: String
-                  ): Call<BasketModel>
+    ): Call<BasketModel>
 
     @FormUrlEncoded
     @POST(Constants.PURCHASE_URL)
@@ -179,6 +179,16 @@ interface APIInterface {
                     @Field("transId") transId: String,
                     @Field("access_token") accessToken: String,
                     @Field("payment_method_nonce") nonce: String
+                    ): Call<SubmitOrderModel>
+
+    @FormUrlEncoded
+    @POST(Constants.SUBMIT_GOOGLE_ORDER_URL)
+    fun submitGoogleOrder(@Field("userId") userId: String,
+                    @Field("orderId") orderId: String,
+                    @Field("transId") transId: String,
+                    @Field("access_token") accessToken: String,
+                    @Field("productId") productId: String,
+                    @Field("purchaseToken") purchaseToken: String
                     ): Call<SubmitOrderModel>
 
     @FormUrlEncoded

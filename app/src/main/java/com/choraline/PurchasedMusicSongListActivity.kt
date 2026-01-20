@@ -37,6 +37,7 @@ import com.choraline.utils.AppController
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.util.Locale
 
 
 open class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener,
@@ -272,7 +273,7 @@ open class PurchasedMusicSongListActivity : BaseActivity(), View.OnClickListener
         }
         player = MediaPlayer()
 
-        purchasedmusicsongs_txtVoiceType!!.setText(selectedTitle.toUpperCase() + "\n" + selectedVoiceType)
+        purchasedmusicsongs_txtVoiceType!!.setText(selectedTitle.uppercase(Locale.getDefault()) + "\n" + selectedVoiceType)
         adapter = PurchasedSongsListAdapter(context, this@PurchasedMusicSongListActivity, songList)
          toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

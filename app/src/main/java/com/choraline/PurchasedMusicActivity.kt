@@ -60,10 +60,6 @@ class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefres
         adapter= PurchasedMusicAlbumListAdapter(context, this, albumList)
         initUI()
 
-
-
-
-
     }
 
     fun initUI()
@@ -101,14 +97,14 @@ class PurchasedMusicActivity : BaseActivity(), View.OnClickListener, SwipeRefres
     fun showSongList(pos: Int)
     {
         val intents = Intent(context, PurchasedMusicSongListActivity::class.java)
-        intents.putExtra("title", albumList!!.get(pos)!!.title+" "+albumList!!.get(pos)!!.subtitle)
-        intents.putExtra("voiceType", albumList!!.get(pos)!!.voiceType)
-        intents.putExtra("songList", Gson()!!.toJson(albumList!!.get(pos)!!.songlist))
+        intents.putExtra("title", albumList.get(pos).title+" "+albumList.get(pos).subtitle)
+        intents.putExtra("voiceType", albumList.get(pos).voiceType)
+        intents.putExtra("songList", Gson().toJson(albumList.get(pos).songlist))
 
-        Log.d(TAG,"songList    "+albumList!!.get(pos)!!.songlist.size)
-        intents.putExtra(Constants.AppConstants.NAME,albumList!!.get(pos)!!.title)
-        intents.putExtra(Constants.AppConstants.SUBTITLE,albumList!!.get(pos)!!.subtitle)
-        intents.putExtra("albumId", albumList!!.get(pos)!!.id)
+        Log.d(TAG,"songList    "+albumList.get(pos).songlist.size)
+        intents.putExtra(Constants.AppConstants.NAME,albumList.get(pos).title)
+        intents.putExtra(Constants.AppConstants.SUBTITLE,albumList.get(pos).subtitle)
+        intents.putExtra("albumId", albumList.get(pos).id)
 
         startActivity(intents)
     }

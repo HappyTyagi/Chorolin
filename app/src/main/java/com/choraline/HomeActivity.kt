@@ -516,7 +516,6 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
                     } else {
                         Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
                     }
-
                 }
 
                 override fun onFailure(call: Call<ForceUpdateResponse>, t: Throwable) {
@@ -528,7 +527,9 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
 
     private fun checkForUpdateView(versionData: Int?) {
-        if (versionData!! < 56) {
+        //58
+        if (versionData!! < 67) {
+//        if (versionData!! < 44) {
             val updateBottomSheet = UpdateBottomSheet()
             updateBottomSheet.show(supportFragmentManager, "UpdateBottomSheet")
         }

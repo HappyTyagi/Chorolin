@@ -24,6 +24,10 @@ class BasketData {
     @Expose
     var subtotal: String = ""
 
+    @SerializedName("barcode")
+    @Expose
+    var barcode: String = ""
+
     @SerializedName("list")
     @Expose
     var list = ArrayList<BasketItemData>()

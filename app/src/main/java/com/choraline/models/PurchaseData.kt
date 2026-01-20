@@ -48,4 +48,8 @@ class PurchaseData {
     @SerializedName("braintreeToken")
     @Expose
     var braintreeToken: String = ""
+
+    @SerializedName("result")
+    @Expose
+    var result: String = ""
 }

@@ -45,6 +45,7 @@ object Constants {
     const val PURCHASE_URL = "api.php?action=purchase"
     const val GET_TOKEN_URL = "api.php?action=getBraintreeToken"
     const val SUBMIT_ORDER_URL = "api.php?action=submitOrder"
+    const val SUBMIT_GOOGLE_ORDER_URL = "api.php?action=submitOrderAndroid"
     const val ORDER_HISTORY_URL = "api.php?action=orderHistory"
     const val PURCHASED_MUSIC_URL = "api.php?action=purchasedMusic"
 
@@ -87,9 +88,10 @@ object Constants {
     const val API_GET_TOKEN = 180
     const val API_SUBMIT_ORDER = 19
     const val API_GET_COUNTRY_LIST = 20
-
     const val FREE_GIFT_API = 21
     const val FREE_GIFT_CHECK_API = 22
+    const val API_GOOGLE_SUBMIT_ORDER = 23
+
 
     interface ACTION {
         companion object {
