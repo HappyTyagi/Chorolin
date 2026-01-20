@@ -583,7 +583,7 @@ class BasketActivity : BaseActivity(), View.OnClickListener, APIListener, DropIn
                 Utility.showSnakeBar(layoutParent!!, result.message)
             }
         }
-        if (api == Constants.API_SUBMIT_ORDER) {
+        if (api == Constants.API_GOOGLE_SUBMIT_ORDER) {
             val result = obj as SubmitOrderModel
             if (result.status) {
                 AppController.appPref.basketData = ""

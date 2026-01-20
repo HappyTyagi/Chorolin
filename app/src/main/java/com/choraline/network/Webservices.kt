@@ -648,27 +648,13 @@ class Webservices(
 
         if (Utility!!.isNetworkAvailable(mContext)) {
 
-            Log.e("callGoogleSubmitOrderAPI1", "userId      - " + userId)
-            Log.e("callGoogleSubmitOrderAPI1", "productId      - " + productId)
-            Log.e("callGoogleSubmitOrderAPI1", "transId      - " + purcase.orderId.toString())
-            Log.e("callGoogleSubmitOrderAPI1", "orderID!!      - " + orderID!!)
-            Log.e(
-                "callGoogleSubmitOrderAPI1",
-                "AppController.appPref.accessToken      - " + AppController.appPref.accessToken
-            )
-            Log.e(
-                "callGoogleSubmitOrderAPI1",
-                "purcase.purchaseToken      - " + purcase.purchaseToken
-            )
-            Log.e("callGoogleSubmitOrderAPI1", "gson      - " + gson.toJson(purcase))
-
-
             var call = mApiInterface.submitGoogleOrder(
                 userId,
                 orderID!!,
                 purcase.orderId.toString(),
                 AppController.appPref.accessToken,
-                productId, purcase.purchaseToken
+                productId,
+                purcase.purchaseToken
             )
             call.enqueue(object : Callback<SubmitOrderModel> {
                 override fun onResponse(
@@ -676,14 +662,10 @@ class Webservices(
                     response: Response<SubmitOrderModel>
                 ) {
                     val mObject = response.body()
-                    Log.e("callGoogleSubmitOrderAPI", gson.toJson(response.body()))
+                    Log.e("callGoogleSubmitOrderAPI", Gson()!!.toJson(mObject))
                     if (mObject != null) {
                         onResponseSuccess(mObject, api)
 
-
-                        val json = gson.toJson(response.body())
-                        Log.e("callGoogleSubmitOrderAPI", Gson()!!.toJson(json))
-                        Log.e("callGoogleSubmitOrderAPI", response.body().toString())
                     }
                 }
 

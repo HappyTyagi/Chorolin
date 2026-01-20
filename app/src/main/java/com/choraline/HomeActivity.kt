@@ -528,7 +528,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener, SwipeRefreshLayout.On
 
     private fun checkForUpdateView(versionData: Int?) {
         //58
-        if (versionData!! < 67) {
+        if (versionData!! < 68) {
 //        if (versionData!! < 44) {
             val updateBottomSheet = UpdateBottomSheet()
             updateBottomSheet.show(supportFragmentManager, "UpdateBottomSheet")
